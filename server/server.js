@@ -8,9 +8,9 @@ app.use(cors());
 app.use(express.json());
 
 // Test database connection
-sequelize.authenticate()
-  .then(() => console.log('Database connected...'))
-  .catch(err => console.log('Error: ' + err));
+// sequelize.authenticate()
+//   .then(() => console.log('Database connected...'))
+//   .catch(err => console.log('Error: ' + err));
 
 // Define routes here
 
