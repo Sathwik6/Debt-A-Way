@@ -1,6 +1,7 @@
 import React, {useState}from "react";
 import { Link } from 'react-router-dom';
 import OrganizationName from "../components/OrganiationName";
+import './Login.css'
 
 function Login(){
     const [formData, setFormData] = useState({
@@ -23,8 +24,8 @@ function Login(){
 
     return (
         <div className="Login">
-            <OrganizationName />
             <div className="Login-form">
+            <OrganizationName className="title"/>
                 <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
