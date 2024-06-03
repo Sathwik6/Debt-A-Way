@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import sequelize from './db/config.js';
+// import sequelize from './db/config.js';
 
 const app = express();
 
@@ -14,5 +14,5 @@ app.use(express.json());
 
 // Define routes here
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5016;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
