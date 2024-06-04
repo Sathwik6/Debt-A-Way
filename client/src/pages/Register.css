@@ -6,7 +6,6 @@
 
 
 .register-page{
-    position: absolute;
     height: 100%;
     width: 100%;
 }
@@ -22,9 +21,9 @@
 
 .org_title-container{
     position: absolute;
-    background-color: rgb(158, 235, 71);
+    /* background-color: rgb(158, 235, 71); */
     margin-left: -1px;
-    /*background-color: rgb(114,137,218);*/
+    background-color: rgb(114,137,218);
     width: 50%;
     height: 100%;
     font-family: Arial, Helvetica, sans-serif ;
