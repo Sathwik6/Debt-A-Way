@@ -6,43 +6,52 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    margin-top: -8px;
-    margin-left: -8px;
     background-color: rgb(245, 245, 245);
+}
+
+.Login .org_title{
+    font-size: 5.9vw;
+    font-family: Arial, Helvetica, sans-serif ;
+    margin-top: 13%;
 }
 
 .Login-form{
     position: absolute;
-    top: 9vw;
+    top: 8vw;
 }
 
 
 .form{
     display: flex;
     flex-direction: column;
+    margin-top: 15%;
 }
 
 .form input{
     width: 32vw;
-    margin-bottom: 2.5vw;
+    margin-bottom: 3vw;
     height: 2.7vw;
     font-size: 1.3vw;
-    border-width: 0.2px;
+    border-width: 0.1px;
+    border-color: rgb(201, 201, 201);
     padding-left: 0.3vw;
     padding-top: 0.1vw;
     padding-bottom: 0.1vw;
+    border-radius: 5px;
+    align-self: center;
 }
 
 .form button{
-    width: 30vw;
-    margin-top: 1vw;
+    width: 25vw;
+    margin-top: 2vw;
     margin-bottom: 1vw;
-    margin-left: 1.3vw;
     height: 2.5vw;
     background-color: rgb(0, 130, 229);
     border: none;
     color: white;
     font-size: 1.1vw;
+    align-self: center;
+    border-radius: 5px;
 }
 
 .form button:hover{
@@ -56,6 +65,9 @@
 
 .Login p{
     position: absolute;
-    top: 50vw;
-    font-size: 1.4vw;
+    top: 77%;
+    font-size: 1.6vw;
+    align-self: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+

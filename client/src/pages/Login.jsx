@@ -1,6 +1,5 @@
 import React, {useState}from "react";
 import { Link } from 'react-router-dom';
-import OrganizationName from "../components/OrganiationName";
 import './Login.css'
 
 function Login(){
@@ -25,7 +24,7 @@ function Login(){
     return (
         <div className="Login">
             <div className="Login-form">
-            <OrganizationName className="title"/>
+            <h1 className="org_title"> Debt-A-Way </h1>
                 <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -45,7 +44,7 @@ function Login(){
                 </form>
             </div>
             <p> Don't have an account? &nbsp; 
-                <Link to="/register">Sign up</Link> 
+               <Link to="/register">Sign up</Link>   
             </p>
         </div>
     );
