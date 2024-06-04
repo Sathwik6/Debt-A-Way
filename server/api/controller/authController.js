@@ -1,18 +1,19 @@
-import bcrypt from "bcrypt"
-import { PrismaClient } from "@prisma/client"
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
 // Handles user Login
 const loginUser = async (req, res) => {
-    const { identifier, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await prisma.user.findFirst({
             where: {
                 OR: [
-                    { email: identifier },
-                    { username: identifier }
+                    { email: email },
+                    { username: email }
                 ]
             }
         });
