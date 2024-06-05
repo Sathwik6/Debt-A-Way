@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import React, { useState } from 'react'
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import './App.css'
+import Login from "./pages/Login/Login"
+import Register from "./pages/Register/Register"
 
 
 function App() {
