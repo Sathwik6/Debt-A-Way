@@ -1,0 +1,73 @@
+.Login{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(245, 245, 245);
+}
+
+.Login .org_title{
+    font-size: 5.9vw;
+    font-family: Arial, Helvetica, sans-serif ;
+    margin-top: 10%;
+}
+
+.Login-form{
+    position: relative;
+    top: -2%;
+}
+
+
+.form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15%;
+}
+
+.form input{
+    width: 32vw;
+    margin-bottom: 3vw;
+    height: 2.7vw;
+    font-size: 1.3vw;
+    border-width: 0.1px;
+    border-color: rgb(201, 201, 201);
+    padding-left: 0.3vw;
+    padding-top: 0.1vw;
+    padding-bottom: 0.1vw;
+    border-radius: 5px;
+    align-self: center;
+}
+
+.form button{
+    width: 25vw;
+    margin-top: 2vw;
+    margin-bottom: 1vw;
+    height: 2.5vw;
+    background-color: rgb(0, 130, 229);
+    border: none;
+    color: white;
+    font-size: 1.1vw;
+    align-self: center;
+    border-radius: 5px;
+}
+
+.form button:hover{
+    background-color: rgb(2, 105, 184);
+}
+
+.form button:active{
+    background-color: rgb(2, 63, 110);
+}
+
+
+.Login p{
+    position: relative;
+    font-size: 1.4vw;
+    align-self: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 2%;
+}
+
