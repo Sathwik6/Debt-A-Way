@@ -1,7 +1,6 @@
 import axios from "axios"
 import React, {useState}from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import OrganizationName from "../components/OrganiationName";
 
 function Login (props) {
     const navigate = useNavigate();
@@ -40,7 +39,6 @@ function Login (props) {
 
     return (
         <div className="Login">
-            <OrganizationName />
             <div className="Login-form">
                 <form className="form" onSubmit={handleSubmit}>
                     <input

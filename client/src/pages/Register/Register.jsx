@@ -1,7 +1,6 @@
 import axios from "axios"
 import {Link, useNavigate} from "react-router-dom"
 import React, { useState } from "react"
-import OrganizationName from "../components/OrganiationName"
 
 function Register(){
     const navigate = useNavigate();
@@ -46,7 +45,6 @@ function Register(){
 
     return (
     <div className="Register">
-        <OrganizationName />
         <div className="Register-form">
             <form className="form" onSubmit={handleSubmit}>
                 <input
