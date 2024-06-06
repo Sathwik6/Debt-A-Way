@@ -22,17 +22,16 @@ function Login (props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(formData);
-        console.log(import.meta.env.VITE_BACKEND_BASE_URL);
 
         try {
-            const response = await axios.post('http://localhost:5016/api/auth/login', 
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/login`, 
                 formData
             );
             console.log(response);
             if (response.status === 200){
                 props.authorized(true);
+                navigate("/home");
             }
-            navigate("/home");
         } catch (error) {
             alert("Invalid Credentials")
             console.error("Login failed:", error);

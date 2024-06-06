@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<Navigate to={isAuthorized ? "/home" : "/login"} />} />
         <Route path="/login" element={<Login authorized={setIsAuthorized} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={isAuthorized ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   )

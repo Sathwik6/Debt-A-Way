@@ -21,4 +21,11 @@ const connectDB = async () => {
     }
 };
 
-export { prisma, connectDB };
+const jwtConfig = {
+    secret: process.env.JWT_SECRET,
+    options: {
+      expiresIn: '30m'
+    }
+};
+  
+  export { prisma, connectDB, jwtConfig };

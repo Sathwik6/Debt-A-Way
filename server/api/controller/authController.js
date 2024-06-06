@@ -1,6 +1,8 @@
+import _ from 'lodash'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
+import { jwtConfig } from '../../db/config.js'
 
 const prisma = new PrismaClient();
 
@@ -28,7 +30,17 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        res.status(200).json({ message: 'Login successful' });
+        //just picks the username from the user object
+        const userPayload = _.pick(user, ['username']);
+
+        // Generate a JWT token
+        const token = jwt.sign(userPayload, jwtConfig.secret, jwtConfig.options);
+
+        // Store the token in an HTTP-only cookie
+        res.cookie('token', token, { httpOnly: true });
+
+        // Send response to the client
+        res.status(200).json({ message: 'Login successful'});
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error });
     }

@@ -1,8 +1,10 @@
-import {Link} from "react-router-dom"
+import axios from "axios"
+import {Link, useNavigate} from "react-router-dom"
 import React, { useState } from "react"
 import OrganizationName from "../components/OrganiationName"
 
 function Register(){
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username : "",
         email : "",
@@ -18,9 +20,28 @@ function Register(){
         }));
     }
 
-    function handleSubmit(event){
+    const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(formData)
+
+        try {
+            if (formData.password != formData.confirmPassword){
+                alert("passowrd Doesn't match");
+            }else{
+                const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/register`, 
+                    {
+                        username: formData.username,
+                        email: formData.email,
+                        password: formData.password
+                    }
+                );
+                console.log(response);
+                navigate("/login");
+            }
+        } catch (error) {
+            alert(error.message)
+            console.error("Login failed:", error);
+        }
     }
 
     return (
