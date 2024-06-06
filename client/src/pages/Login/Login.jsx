@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, {useState}from "react";
+import { Link } from 'react-router-dom';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login (props) {
@@ -40,6 +41,7 @@ function Login (props) {
     return (
         <div className="Login">
             <div className="Login-form">
+            <h1 className="org_title"> Debt-A-Way </h1>
                 <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -59,7 +61,7 @@ function Login (props) {
                 </form>
             </div>
             <p> Don't have an account? &nbsp; 
-                <Link to="/register">Sign up</Link> 
+               <Link to="/register">Sign up</Link>   
             </p>
         </div>
     );
