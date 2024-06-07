@@ -1,5 +1,5 @@
 import axios from "axios"
-import React, {useState, useEffect}from "react";
+import React, {useState}from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import "./Login.css";
 import { ClipLoader } from "react-spinners";
@@ -44,7 +44,7 @@ function Login (props) {
     }
 
     return (
-        <div className="Login-page">
+        <div className="Login-container">
             { 
             loading ? 
 
@@ -56,7 +56,7 @@ function Login (props) {
             
             :
 
-            <div className="Login">
+            <div className="Login-page">
                 <div className="Login-form">
                     <h1 className="org_title"> Debt-A-Way </h1>
                     <form className="form" onSubmit={handleSubmit}>

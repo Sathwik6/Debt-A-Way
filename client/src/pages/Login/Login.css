@@ -1,4 +1,4 @@
-.Login-page {
+.Login-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,7 +15,7 @@
 }
 
 
-.Login{
+.Login-page{
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -26,7 +26,7 @@
     background-color: rgb(245, 245, 245);
 }
 
-.Login .org_title{
+.Login-page .org_title{
     font-size: 5.9vw;
     font-family: Arial, Helvetica, sans-serif ;
     margin-top: 10%;
@@ -80,7 +80,7 @@
 }
 
 
-.Login p{
+.Login-page p{
     position: relative;
     font-size: 1.4vw;
     align-self: center;

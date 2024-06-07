@@ -1,10 +1,13 @@
 import axios from "axios"
 import {Link, useNavigate} from "react-router-dom"
 import React, { useState } from "react"
+import { ClipLoader } from "react-spinners";
 import "./Register.css"
 
 function Register(){
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         username : "",
         email : "",
@@ -22,7 +25,8 @@ function Register(){
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData)
+        setLoading(true);
+        console.log(formData);
 
         try {
             if (formData.password != formData.confirmPassword){
@@ -35,6 +39,7 @@ function Register(){
                         password: formData.password
                     }
                 );
+                setLoading(false);
                 console.log(response);
                 navigate("/login");
             }
@@ -45,48 +50,61 @@ function Register(){
     }
 
     return (
-        <div className="register-page">
-        <div className="org_title-container"> <h1>Debt-A-Way </h1></div>
-        <div className="Register">
-            <div className="Register-form">
-                <form className="form" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                    />
-                    <button type="submit"> Sign up </button>
-                </form>
+        <div className="Register-container">
+           {loading ? 
+
+            <ClipLoader className="loader"
+            size={60}
+            color={"#7289da"}
+            loading={loading}
+            />  
+
+            :
+
+            <div className="register-page">
+                <div className="org_title-container"> <h1>Debt-A-Way </h1></div>
+                <div className="Register">
+                    <div className="Register-form">
+                        <form className="form" onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="Confirm Password"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                            />
+                            <button type="submit"> Sign up </button>
+                        </form>
+                    </div>
+                    <p> Have an account? &nbsp; 
+                        <Link to="/login">  Log in</Link>
+                    </p>
+                </div>
             </div>
-            <p> Have an account? &nbsp; 
-                <Link to="/login">  Log in</Link>
-            </p>
-        </div>
-    </div>
-    )
+        } </div>
+    );
 }
+
 
 export default Register;
