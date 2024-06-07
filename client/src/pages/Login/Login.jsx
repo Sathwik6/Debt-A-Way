@@ -1,10 +1,13 @@
 import axios from "axios"
-import React, {useState}from "react";
+import React, {useState, useEffect}from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import "./Login.css";
+import { ClipLoader } from "react-spinners";
 
 function Login (props) {
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -21,6 +24,7 @@ function Login (props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         console.log(formData);
 
         try {
@@ -32,6 +36,7 @@ function Login (props) {
                 props.authorized(true);
                 navigate("/home");
             }
+            setLoading(false);
         } catch (error) {
             alert("Invalid Credentials")
             console.error("Login failed:", error);
@@ -39,31 +44,46 @@ function Login (props) {
     }
 
     return (
-        <div className="Login">
-            <div className="Login-form">
-            <h1 className="org_title"> Debt-A-Way </h1>
-                <form className="form" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                    <button type="submit"> Login </button>
-                </form>
+        <div className="Login-page">
+            { 
+            loading ? 
+
+            <ClipLoader className="loader"
+            size={60}
+            color={"#7289da"}
+            loading={loading}
+            />  
+            
+            :
+
+            <div className="Login">
+                <div className="Login-form">
+                    <h1 className="org_title"> Debt-A-Way </h1>
+                    <form className="form" onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                        <button type="submit"> Login </button>
+                    </form>
+                </div>
+                <p> Don't have an account? &nbsp; 
+                <Link to="/register">Sign up</Link>   
+                </p>
             </div>
-            <p> Don't have an account? &nbsp; 
-               <Link to="/register">Sign up</Link>   
-            </p>
+            }
         </div>
+        
     );
 }
 
