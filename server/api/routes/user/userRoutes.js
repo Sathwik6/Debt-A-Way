@@ -5,7 +5,7 @@ const userRoute = Router()
 
 userRoute.get('/protected', verifyToken, (req, res) => {
     console.log(req.username);
-    res.json({ message: 'This is a protected route', user: req.username});
+    res.status(200).json({ message: 'This is a protected route', user: req.username});
 });
 
 
