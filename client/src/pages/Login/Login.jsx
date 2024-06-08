@@ -1,11 +1,11 @@
 import axios from "axios"
-import React, {useState}from "react";
+import React, {useState, useEffect}from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import "./Login.css";
 import { ClipLoader } from "react-spinners";
 import { Toaster, toast } from 'sonner'
 
-function Login (props) {
+function Login () {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
@@ -14,6 +14,23 @@ function Login (props) {
         email: "",
         password: "",
       });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                //Initially we will get the 401 error as there is no token stored in the cokkie (not logged in)
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`);
+                if (res.status === 200){
+                    navigate("/home");
+                    console.log(res.data);
+                }
+            } catch (error) {
+                console.log("Please Login.", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -46,7 +63,6 @@ function Login (props) {
             );
             console.log(response);
             if (response.status === 200){
-                props.authorized(true);
                 navigate("/home");
             }
         } catch (error) {
