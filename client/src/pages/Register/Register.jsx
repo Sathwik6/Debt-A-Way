@@ -1,10 +1,14 @@
 import axios from "axios"
 import {Link, useNavigate} from "react-router-dom"
 import React, { useState } from "react"
+import { ClipLoader } from "react-spinners";
+import { Toaster, toast } from 'sonner'
 import "./Register.css"
 
 function Register(){
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         username : "",
         email : "",
@@ -22,26 +26,43 @@ function Register(){
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData)
+        console.log(formData);
 
-        try {
-            if (formData.password != formData.confirmPassword){
-                alert("passowrd Doesn't match");
-            }else{
-                const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/register`, 
-                    {
-                        username: formData.username,
-                        email: formData.email,
-                        password: formData.password
-                    }
-                );
-                console.log(response);
-                navigate("/login");
-            }
-        } catch (error) {
-            alert(error.message)
-            console.error("Login failed:", error);
+        // validate user input
+        if(!formData.email || !formData.password || !formData.username || !formData.confirmPassword ){
+            toast.warning("All fields are required!");
+            return;
         }
+        else if (formData.password != formData.confirmPassword){
+            toast.error("Password doesn't match");
+            return;
+        }
+
+        // send request to back end
+        setLoading(true);
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/register`, 
+                {
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password
+                }
+            );
+            console.log(response);
+            toast.success("Accout Created Successfully!");
+            setTimeout(() => {
+                navigate("/login");
+              }, 1000);
+        } catch (error) {
+            if (error.response && error.response.status === 400){
+                toast.warning("Account already exists!");
+            }else {
+                toast.error("An error occurred during registration. Please try again.");
+            }
+            console.log(error.message);
+            console.error("Registration failed:", error);
+        }
+        setLoading(false);
     }
 
     return (
@@ -82,11 +103,12 @@ function Register(){
                 </form>
             </div>
             <p> Have an account? &nbsp; 
-                <Link to="/login">  Log in</Link>
+                <Link to="/login">Log in</Link>
             </p>
         </div>
     </div>
     )
 }
+
 
 export default Register;
