@@ -66,61 +66,48 @@ function Register(){
     }
 
     return (
-        <div className="Register-container">
-            <Toaster position="top-center" richColors />
-           {loading ? 
-
-            <ClipLoader className="loader"
-            size={60}
-            color={"#7289da"}
-            loading={loading}
-            />  
-
-            :
-
-            <div className="register-page">
-                <div className="org_title-container"> <h1>Debt-A-Way </h1></div>
-                <div className="Register">
-                    <div className="Register-form">
-                        <form className="form" onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                placeholder="Confirm Password"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                            />
-                            <button type="submit"> Sign up </button>
-                        </form>
-                    </div>
-                    <p> Have an account? &nbsp; 
-                        <Link to="/login">  Log in</Link>
-                    </p>
-                </div>
+        <div className="register-page">
+        <div className="org_title-container"> <h1>Debt-A-Way </h1></div>
+        <div className="Register">
+            <div className="Register-form">
+                <form className="form" onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm Password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                    />
+                    <button type="submit"> Sign up </button>
+                </form>
             </div>
-        } </div>
-    );
+            <p> Have an account? &nbsp; 
+                <Link to="/login">Log in</Link>
+            </p>
+        </div>
+    </div>
+    )
 }
 
 
