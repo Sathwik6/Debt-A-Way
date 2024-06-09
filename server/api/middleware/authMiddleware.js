@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const verifyToken =  (req, res, next) => {
   // Read the token from the cookie
   const token = req.cookies.token;
-  console.log(token);
+  console.log("Token: ", token);
   if (!token)
     return res.status(401).send("Access denied...No token provided...");
 

@@ -83,4 +83,13 @@ const registerUser = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser };
+const logoutUser = (req, res, next) => {
+    try {
+        res.clearCookie("token");
+        res.json({ success: true });
+      } catch (error) {
+        next(error);
+    }
+};
+
+export { registerUser, loginUser, logoutUser };

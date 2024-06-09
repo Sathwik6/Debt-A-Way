@@ -1,10 +1,13 @@
 import axios from "axios"
-import React, {useState}from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Toaster, toast } from "sonner"
+import { ClipLoader } from "react-spinners"
+import React, {useState, useEffect}from "react"
+import { Link, useNavigate } from "react-router-dom"
 import "./Login.css";
-import { ClipLoader } from "react-spinners";
 
-function Login (props) {
+axios.defaults.withCredentials = true;
+
+function Login () {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
@@ -13,6 +16,23 @@ function Login (props) {
         email: "",
         password: "",
       });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                //Initially we will get the 401 error as there is no token stored in the cokkie (not logged in)
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`);
+                if (res.status === 200){
+                    navigate("/home");
+                    console.log(res.data);
+                }
+            } catch (error) {
+                console.log("Please Login.", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -24,27 +44,39 @@ function Login (props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setLoading(true);
-        console.log(formData);
+        // validate user input
+        if (!formData.email && !formData.password){
+            toast.warning('Please enter valid email');
+            return;
+        }else if (!formData.email){
+            toast.warning('Please enter valid email');
+            return;
+        } else if (!formData.password){
+            toast.error('Password required!');
+            return;
+        }
 
+         // send request to back end
+        console.log(formData);
+        setLoading(true);
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/login`, 
                 formData
             );
             console.log(response);
             if (response.status === 200){
-                props.authorized(true);
                 navigate("/home");
             }
-            setLoading(false);
         } catch (error) {
-            alert("Invalid Credentials")
+            toast.error('Invalid Credentials');
             console.error("Login failed:", error);
         }
+        setLoading(false);
     }
 
     return (
         <div className="Login-container">
+            <Toaster position="top-center" richColors />
             { 
             loading ? 
 
@@ -63,7 +95,7 @@ function Login (props) {
                         <input
                             type="text"
                             name="email"
-                            placeholder="Email"
+                            placeholder="Username/Email"
                             value={formData.email}
                             onChange={handleChange}
                         />
