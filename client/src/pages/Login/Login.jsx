@@ -1,9 +1,11 @@
 import axios from "axios"
-import React, {useState, useEffect}from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Toaster, toast } from "sonner"
+import { ClipLoader } from "react-spinners"
+import React, {useState, useEffect}from "react"
+import { Link, useNavigate } from "react-router-dom"
 import "./Login.css";
-import { ClipLoader } from "react-spinners";
-import { Toaster, toast } from 'sonner'
+
+axios.defaults.withCredentials = true;
 
 function Login () {
     const navigate = useNavigate();
@@ -93,7 +95,7 @@ function Login () {
                         <input
                             type="text"
                             name="email"
-                            placeholder="Email"
+                            placeholder="Username/Email"
                             value={formData.email}
                             onChange={handleChange}
                         />

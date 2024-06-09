@@ -28,4 +28,4 @@ const jwtConfig = {
     }
 };
   
-  export { prisma, connectDB, jwtConfig };
+export { prisma, connectDB, jwtConfig };
