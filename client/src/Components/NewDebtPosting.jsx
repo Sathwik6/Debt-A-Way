@@ -63,8 +63,6 @@ function NewDebtPosting(){
         }
     }
 
-
-
     return (
         <div className="full-width-container">
             <h3>Post a New Debt</h3>

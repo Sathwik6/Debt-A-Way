@@ -5,7 +5,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5173:5173"
     depends_on:
       - server
 
@@ -14,17 +14,17 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5016:5016"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/mydatabase
+      - DATABASE_URL=postgresql://debt-a-way-db_owner:8FBCgkub7XMi@ep-wild-paper-a5uiskpr.us-east-2.aws.neon.tech/debt-a-way-db?sslmode=require
 
   db:
-    image: postgres:13
+    image: postgres:16
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: debt-a-way-db_owner
+      POSTGRES_PASSWORD: 8FBCgkub7XMi
       POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"

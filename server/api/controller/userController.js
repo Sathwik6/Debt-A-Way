@@ -32,7 +32,7 @@ const walletBalance = async (req, res) =>{
     }
 };
 
-const debtsReceivale = async (req, res) =>{
+const debtsReceivable = async (req, res) =>{
     try {
         const incomingDebtsToUser = await prisma.debtPosting.findMany({
             where: {
@@ -44,11 +44,11 @@ const debtsReceivale = async (req, res) =>{
                 amount: true
             }
         });
-        res.json({message: "Records Fetched Successfully", debtsReceivale: incomingDebtsToUser});
+        res.json({message: "Records Fetched Successfully", debtsReceivable: incomingDebtsToUser});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
 
-export {debtsOwed, walletBalance, debtsReceivale};
+export {debtsOwed, walletBalance, debtsReceivable};
