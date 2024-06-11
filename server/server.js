@@ -4,8 +4,9 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { connectDB } from './db/config.js'
-import authUser from './api/routes/user/userRoutes.js'
-import authRoutes from './api/routes/auth/authRoutes.js'
+import userRoutes from './api/routes/userRoutes.js'
+import authRoutes from './api/routes/authRoutes.js'
+import productRoutes from './api/routes/debtRoutes.js'
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,8 +30,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/routes/user', authUser);
+app.use('/api/routes/user', userRoutes);
 app.use('/api/routes/auth', authRoutes);
+app.use('/api/routes/debt', productRoutes);
 
 // Connect to the database and start the server
 connectDB();
