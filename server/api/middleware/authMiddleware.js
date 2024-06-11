@@ -18,10 +18,10 @@ const verifyToken =  (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.username = decoded;
+    //just setting the username object that contains (username, iat, and exp)
+    req.username = decoded.username;
     next();
   } catch (er) {
-    // console.log("err", er);
     //Incase of expired jwt or invalid token kill the token and clear the cookie
     res.clearCookie("token");
     return res.status(400).send(er.message);

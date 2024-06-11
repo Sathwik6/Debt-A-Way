@@ -2,6 +2,7 @@ import axios from "axios"
 import React, { useEffect } from "react"
 import Navbar from "../Components/Navbar"
 import { useNavigate } from "react-router-dom"
+import Header from "../Components/Header.jsx";
 
 function Wallet(){
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Wallet(){
     return (
         <div>
             <Navbar />
+            <Header />
             <h1>Welcome to Wallet</h1>
         </div>
     );
