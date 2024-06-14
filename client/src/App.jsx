@@ -1,10 +1,10 @@
 import React from "react"
-import Home from "./pages/Home"
-import Wallet from "./pages/Wallet"
+import Home from "./pages/Home/Home"
+import Wallet from "./pages/Wallet/Wallet"
 import Login from "./pages/Login/Login"
-import DebtsOwed from "./pages/DebtsOwed"
+import DebtsOwed from "./pages/DebtsOwed/DebtsOwed"
 import Register from "./pages/Register/Register"
-import DebtsReceivable from "./pages/DebtsReceivable"
+import DebtsReceivable from "./pages/DebtsReceivable/DebtsReceivable"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 
 

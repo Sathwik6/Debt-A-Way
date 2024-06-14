@@ -1,12 +1,12 @@
 import axios from "axios"
 import { Toaster, toast } from "sonner"
-import Navbar from "../Components/Navbar"
+import Navbar from "../../Components/Navbar.jsx"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
-import Header from "../Components/Header.jsx"
+import Header from "../../Components/Header.jsx"
 // import TradableDebts from "../Components/TradableDebts.jsx";
-import NewDebtPosting from "../Components/NewDebtPosting.jsx";
-import UnfulfilledDebts from "../Components/UnfulfilledDebts.jsx";
+import NewDebtPosting from "../../Components/NewDebtPosting.jsx";
+import UnfulfilledDebts from "../../Components/UnfulfilledDebts.jsx";
 
 
 axios.defaults.withCredentials = true;
