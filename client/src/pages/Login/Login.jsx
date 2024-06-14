@@ -95,7 +95,7 @@ function Login () {
                         <input
                             type="text"
                             name="email"
-                            placeholder="Username/Email"
+                            placeholder="Username / Email"
                             value={formData.email}
                             onChange={handleChange}
                         />
