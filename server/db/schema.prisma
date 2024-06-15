@@ -8,11 +8,34 @@ generator client {
 }
 
 model User {
-  username      String   @id @db.VarChar(40)
-  email         String   @unique
-  password      String   @db.VarChar(255)
-  walletBalance Decimal  @default(0.00)
+  username      String        @id @db.VarChar(40)
+  email         String        @unique
+  password      String        @db.VarChar(255)
+  walletBalance Decimal       @default(0.00)
+  debtsBorrowed DebtPosting[] @relation("BorrowedDebts")
+  debtsLent     DebtPosting[] @relation("LentDebts")
 }
+
+
+model DebtPosting {
+  id               String   @id @default(uuid())
+  borrowerUsername String
+  borrower         User     @relation("BorrowedDebts", fields: [borrowerUsername], references: [username])
+  lenderUsername   String?
+  lender           User?    @relation("LentDebts", fields: [lenderUsername], references: [username])
+  amount           Decimal
+  interestRate     Float
+  isFulfilled      Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  isPaid           Boolean  @default(false)
+  isTradable       Boolean  @default(false)
+  tradePrice       Decimal  @default(0.0)
+
+  @@index([borrowerUsername])
+  @@index([lenderUsername])
+}
+
+
 
 
 

@@ -1,11 +1,10 @@
 import axios from "axios"
-import Navbar from "../Components/Navbar";
-import React, { useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react"
+import Navbar from "../../Components/Navbar"
+import { useNavigate } from "react-router-dom"
+import Header from "../../Components/Header.jsx";
 
-axios.defaults.withCredentials = true;
-
-function Home(){
+function Wallet(){
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,16 +20,14 @@ function Home(){
 
         fetchData();
     }, []);
-    
 
     return (
         <div>
             <Navbar />
-            <h1>
-                Welcome to Home Page!
-            </h1>
+            <Header />
+            <h1>Welcome to Wallet</h1>
         </div>
-    )
+    );
 }
 
-export default Home;
+export default Wallet;

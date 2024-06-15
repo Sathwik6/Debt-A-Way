@@ -39,6 +39,7 @@ html, body {
     justify-content: center;
     background-color: rgb(114, 137, 218);
     width: 50%;
+    font-family: Helvetica, sans-serif ;
 }
 
 .org_title-container h1 {
