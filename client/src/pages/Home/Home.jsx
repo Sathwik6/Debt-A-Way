@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import Header from "../../Components/Header/Header.jsx"
 import './Home.css'
-// import TradableDebts from "../Components/TradableDebts.jsx";
 import NewDebtPosting from "../../Components/NewDebtPosting/NewDebtPosting.jsx";
-import UnfulfilledDebts from "../../Components/UnfulfilledDebts/UnfulfilledDebts.jsx";
+import DebtsOwed from "../../Components/DebtsOwed/DebtsOwed.jsx"
+import DebtsReceivable from "../../Components/DebtsReceivable/DebtsReceivable.jsx"
 
 
 axios.defaults.withCredentials = true;
@@ -35,17 +35,17 @@ function Home(){
         <>
         <Navbar />
         <div className="home-page">
-            
             <Header />
-            {/*<NewDebtPosting />
-            <UnfulfilledDebts />*/}
-            {/* <TradeableDebts /> */}
+            <NewDebtPosting />
+            <DebtsOwed />
+            <DebtsReceivable/>
         </div>
+        
         
         </>
 
         
     )
-}
+};
 
 export default Home;

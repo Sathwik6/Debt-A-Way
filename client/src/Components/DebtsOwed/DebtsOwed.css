@@ -1,0 +1,10 @@
+.debts-owed-container{
+    margin-top: 7%;
+    width: 64%;
+    padding-left: 5%;
+    background-color: aqua;
+}
+.debts-owed-container h1{
+    font-size: 2vw;
+    font-weight: 500;
+}

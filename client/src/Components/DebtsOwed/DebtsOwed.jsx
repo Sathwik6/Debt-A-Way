@@ -1,9 +1,9 @@
 import axios from "axios"
 import React, { useEffect } from "react"
-import Navbar from "../../Components/Navbar/Navbar"
 import { useNavigate } from "react-router-dom"
+import './DebtsOwed.css'
 
-function DebtsReceivable(){
+function DebtsOwed(){
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,11 +21,10 @@ function DebtsReceivable(){
     }, []);
 
     return (
-        <div>
-            <Navbar />
-            <h1>Welcome to DebtsReceivable</h1>
+        <div className="debts-owed-container">
+            <h1>DebtsOwed</h1>
         </div>
     );
 }
 
-export default DebtsReceivable;
+export default DebtsOwed;
