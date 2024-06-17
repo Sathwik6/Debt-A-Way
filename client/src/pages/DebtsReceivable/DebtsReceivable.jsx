@@ -2,6 +2,7 @@ import axios from "axios"
 import React, { useEffect } from "react"
 import Navbar from "../../Components/Navbar"
 import { useNavigate } from "react-router-dom"
+import Lendings from "../../Components/Lendings"
 
 function DebtsReceivable(){
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function DebtsReceivable(){
         <div>
             <Navbar />
             <h1>Welcome to DebtsReceivable</h1>
+            <Lendings />
         </div>
     );
 }
