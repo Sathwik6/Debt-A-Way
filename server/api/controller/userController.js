@@ -50,5 +50,29 @@ const debtsReceivable = async (req, res) =>{
     }
 };
 
+const activeDebtsTotal= async (req, res) =>{
+    try {
+        const userActiveDebtsTotal = await prisma.user.findFirst({
+            where: { username: req.username },
+            select: { activeDebtsTotal: true }
+        });
+        res.json({message: "Active Debts Total Fetched Successfully", activeDebtsTotal: userActiveDebtsTotal.activeDebtsTotal});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-export {debtsOwed, walletBalance, debtsReceivable};
+const activeLendTotal = async (req, res) =>{
+    try {
+        const userActiveLendTotal = await prisma.user.findFirst({
+            where: { username: req.username },
+            select: { activeLendTotal: true }
+        });
+        res.json({message: "Active Lend Total Fetched Successfully", activeLendTotal: userActiveLendTotal.activeLendTotal});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export {debtsOwed, walletBalance, debtsReceivable,activeDebtsTotal,activeLendTotal};
