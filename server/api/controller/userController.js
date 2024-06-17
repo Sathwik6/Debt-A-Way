@@ -75,4 +75,4 @@ const activeLendTotal = async (req, res) =>{
 };
 
 
-export {debtsOwed, walletBalance, debtsReceivable,activeDebtsTotal,activeLendTotal};
+export {debtsOwed, walletBalance, debtsReceivable};
