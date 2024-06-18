@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verifyToken from "../middleware/authMiddleware.js";
-import { debtsOwed, walletBalance, debtsReceivable } from "../controller/userController.js";
+import { debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory } from "../controller/userController.js";
 
 const userRoute = Router()
 
@@ -10,9 +10,14 @@ userRoute.get('/protected', verifyToken, (req, res) => {
 });
 
 //user routes
-userRoute.get('/debts-owed', verifyToken, debtsOwed);
+userRoute.get('/debts', verifyToken, debts);
+userRoute.get('/lendings', verifyToken, lendings);
+userRoute.get('/debts-history', verifyToken, debtsHistory);
 userRoute.get('/wallet-balance', verifyToken, walletBalance);
-userRoute.get('/debts-receivable', verifyToken, debtsReceivable);
+userRoute.get('/activeLendTotal', verifyToken, activeLendTotal);
+userRoute.get('/lendings-history', verifyToken, lendingsHistory);
+userRoute.get('/activeDebtsTotal', verifyToken, activeDebtsTotal);
+
 
 
 

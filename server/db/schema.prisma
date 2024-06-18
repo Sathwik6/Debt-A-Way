@@ -8,12 +8,14 @@ generator client {
 }
 
 model User {
-  username      String        @id @db.VarChar(40)
-  email         String        @unique
-  password      String        @db.VarChar(255)
-  walletBalance Decimal       @default(0.00)
-  debtsBorrowed DebtPosting[] @relation("BorrowedDebts")
-  debtsLent     DebtPosting[] @relation("LentDebts")
+  username            String        @id @db.VarChar(40)
+  email               String        @unique
+  password            String        @db.VarChar(255)
+  walletBalance       Decimal       @default(0.00)
+  activeDebtsTotal    Decimal       @default(0.00)
+  activeLendTotal     Decimal       @default(0.00)
+  debtsBorrowed       DebtPosting[] @relation("BorrowedDebts")
+  debtsLent           DebtPosting[] @relation("LentDebts")
 }
 
 

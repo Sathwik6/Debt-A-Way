@@ -1,5 +1,8 @@
 import axios from "axios"
 import React, { useEffect } from "react"
+client/src/Components/DebtsOwed/DebtsOwed.jsx
+import Debts from "../../Components/Debts"
+import Navbar from "../../Components/Navbar"
 import { useNavigate } from "react-router-dom"
 import './DebtsOwed.css'
 

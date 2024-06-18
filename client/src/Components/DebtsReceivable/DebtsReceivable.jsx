@@ -3,6 +3,7 @@ import React, { useEffect } from "react"
 import Navbar from "../../Components/Navbar/Navbar"
 import { useNavigate } from "react-router-dom"
 import './DebtsReceivable.css'
+import Lendings from "../../Components/Lendings"
 
 function DebtsReceivable(){
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function DebtsReceivable(){
     return (
         <div className="debts-receivable-container">
             <h1>Welcome to DebtsReceivable</h1>
+            <Lendings />
         </div>
     );
 }
