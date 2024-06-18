@@ -1,30 +1,31 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 
-function Debts(){
-    const [debtsOwed, setDebtsOwed] = useState([]);
+function myDebtPostings(){
+    const [myDebtPostings, setmyDebtPostings] = useState([]);
     
-    // const handlePay = async (event,postid)=>{
-    //     
-    // }
+    // const [newDebtForm, setNewDebtFrom] = useState({
+    //     amount: 0,
+    //     interestRate: 0.0
+    // });
 
     useEffect(() => {
-        const fetchDebts = async () =>{
+        const fetchDebtPostings = async () =>{
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/debts`);
-                setDebtsOwed(response.data.debtsOwed);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/debt/myDebtPostings`);
+                setmyDebtPostings(response.data.myDebtPostings);
               } catch (error) {
-                console.error('Error fetching Debts Owed by User:', error);
+                console.error('Error fetching your debt postings:', error);
               }
         };
 
-        fetchDebts();
+        fetchDebtPostings();
     }, []);
 
     return (
         <div className="full-width-container">
-            <h3 className="section-heading">Debts</h3>
-            {debtsOwed.length > 0 ? (
+            <h3 className="section-heading">My Debt Postings</h3>
+            {myDebtPostings.length > 0 ? (
                 <table className="table">
                     <thead>
                         <tr>
@@ -35,23 +36,23 @@ function Debts(){
                         </tr>
                     </thead>
                     <tbody>
-                        {debtsOwed.map(debt => (
+                        {myDebtPostings.map(debt => (
                             <tr key={debt.id}>
-                                <td>{debt.lenderUsername}</td>
+                                <td>{debt.borrowerUsername}</td>
                                 <td>{debt.amount}</td>
                                 <td>{debt.interestRate}%</td>
                                 <td>
-                                    <button onClick={(event) => handlePay(event,debt.id)}>pay</button>
+                                    <button /*onClick={(event) => handleLendClick(event,debt.id)}*/>Cancel</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             ) : (
-                <p>No Debts Available.</p>
+                <p>You don't have debt postings.</p>
             )}
         </div> 
     );
 }
 
-export default Debts;
+export default myDebtPostings;

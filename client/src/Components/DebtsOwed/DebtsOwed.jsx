@@ -1,32 +1,57 @@
 import axios from "axios"
-import React, { useEffect } from "react"
-import Debts from "../Debts/Debts"
-import Navbar from "../Navbar/Navbar"
-import { useNavigate } from "react-router-dom"
-import './DebtsOwed.css'
+import React, { useEffect, useState } from "react"
 
-function DebtsOwed(){
-    const navigate = useNavigate();
+function Debts(){
+    const [debtsOwed, setDebtsOwed] = useState([]);
+    
+    // const handleClick = async (event,postid)=>{
+    //     
+    // }
 
     useEffect(() => {
-        const fetchData = async () => {
-        try {
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`);
-            console.log(res.data);
-        } catch (error) {
-            navigate("/login");
-            console.error('Error fetching data:', error);
-        }
+        const fetchDebts = async () =>{
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/debts`);
+                setDebtsOwed(response.data.debtsOwed);
+              } catch (error) {
+                console.error('Error fetching Debts Receivable by User:', error);
+              }
         };
 
-        fetchData();
+        fetchDebts();
     }, []);
 
     return (
-        <div className="debts-owed-container">
-            <h1>DebtsOwed</h1>
-        </div>
+        <div className="full-width-container">
+            <h3 className="section-heading">Debts</h3>
+            {debtsOwed.length > 0 ? (
+                <table className="table">
+                    <thead>
+                        <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Interest Rate</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {debtsOwed.map(debt => (
+                            <tr key={debt.id}>
+                                <td>{debt.lenderUsername}</td>
+                                <td>{debt.amount}</td>
+                                <td>{debt.interestRate}%</td>
+                                <td>
+                                    <button onClick={(event) => handleClick(event, debt.id)}>Pay</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p>No Debts Available.</p>
+            )}
+        </div> 
     );
 }
 
-export default DebtsOwed;
+export default Debts;

@@ -1,18 +1,16 @@
 import axios from "axios"
 import { Toaster, toast } from "sonner"
 import Navbar from "../../Components/Navbar/Navbar.jsx"
+import MyDebtPostings from "../../Components/MyDebtPostings/MyDebtPostings.jsx";
+import MyTradePostings from "../../Components/MyTradePostings/MyTradePostings.jsx"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
-import Header from "../../Components/Header/Header.jsx"
-import './Home.css'
-import NewDebtPosting from "../../Components/NewDebtPosting/NewDebtPosting.jsx";
-import DebtsOwed from "../../Components/DebtsOwed/DebtsOwed.jsx"
-import DebtsReceivable from "../../Components/DebtsReceivable/DebtsReceivable.jsx"
+
 
 
 axios.defaults.withCredentials = true;
 
-function Home(){
+function MyListings(){
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -34,11 +32,9 @@ function Home(){
     return (
         <>
         <Navbar />
-        <div className="home-page">
-            <Header />
-            <NewDebtPosting />
-            <DebtsOwed/>
-            <DebtsReceivable/>
+        <div className="myListings-page">
+            <MyDebtPostings/>
+            <MyTradePostings/>
         </div>
         
         
@@ -48,4 +44,4 @@ function Home(){
     )
 };
 
-export default Home;
+export default MyListings;

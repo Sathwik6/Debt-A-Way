@@ -135,7 +135,7 @@ const lend=async(req,res)=>{
 //Backend login of tradeableDebts
 const tradableDebts = async (req, res) =>{
     try {
-        const currentTradableDebts = await prisma.debtPosting.findMany({
+        const tradableDebts = await prisma.debtPosting.findMany({
             where: {
                 isFulfilled: true,
                 isTradable:true,
@@ -149,15 +149,60 @@ const tradableDebts = async (req, res) =>{
                 tradePrice:true
             }
         });
-        res.status(200).json({ message: 'Tradeable Debts Fetched Successfully', tradableDebts: currentTradableDebts });
+        res.status(200).json({ message: 'Tradeable Debts Fetched Successfully', tradableDebts: tradableDebts });
     } catch (error) {
         res.status(500).json({ message: 'Fetching Tradable Debts Failed', error });
     }
 }
+
+//Backend login of tradeableDebts
+const myTradePostings = async (req, res) =>{
+    try {
+        const myTradePostings = await prisma.debtPosting.findMany({
+            where: {
+                isFulfilled: true,
+                isTradable:true,
+                lenderUsername:req.username
+                //borrowerUsername: { not: req.username } Commented this out to allow users to buyout their own debt
+            },
+            select: {
+                id: true,
+                amount: true,
+                interestRate: true,
+                borrowerUsername: true,
+                tradePrice:true
+            }
+        });
+        res.status(200).json({ message: 'Your Trade Postings Fetched Successfully', myTradePostings: myTradePostings });
+    } catch (error) {
+        res.status(500).json({ message: 'Fetching your Trade Postings Failed', error });
+    }
+}
+
+const myDebtPostings = async (req, res) =>{
+    try {
+        const myDebtPostings = await prisma.debtPosting.findMany({
+            where: {
+                isFulfilled: false,
+                borrowerUsername: req.username
+            },
+            select: {
+                id: true,
+                amount: true,
+                interestRate: true,
+                borrowerUsername: true
+            }
+        });
+        res.status(200).json({ message: 'Your Debt Postings Fetched Successfully', myDebtPostings: myDebtPostings });
+    } catch (error) {
+        res.status(500).json({ message: 'Fetching your debt postings Failed', error });
+    }
+
+};
 
 //Backend Logic for Trade
 // const trade=async (req,res)=>{
 
 // }
 
-export { debtPosting, unfulfilledDebts,lend,tradableDebts };
+export { debtPosting, unfulfilledDebts,lend,tradableDebts,myDebtPostings,myTradePostings };
