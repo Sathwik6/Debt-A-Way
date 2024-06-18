@@ -67,7 +67,7 @@ function unfulfilledDebts(){
                                 <td>{debt.amount}</td>
                                 <td>{debt.interestRate}%</td>
                                 <td>
-                                    <button onClick={(event) => handleLendClick(event,debt.id)}>Lend</button>
+                                    <button onClick={(event) => handleLendClick(event, debt.id)}>Lend</button>
                                 </td>
                             </tr>
                         ))}

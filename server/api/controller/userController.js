@@ -125,5 +125,35 @@ const lendingsHistory = async (req, res) =>{
     }
 };
 
+const deleteDebtPosting = async (req, res) =>{
+    const { postId } = req.body;
+    try {
+        const deletePosting = await prisma.debtPosting.delete({
+            where: {
+              id: postId,
+            },
+        });
+        res.json({message: "debtPosting Deleted Successfully", deleteDebtPosting: deletePosting});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory};
+const updateDebtPosting = async (req, res) =>{
+    const { postId, postingInfo } = req.body;
+    try {
+        const updatePosting = await prisma.debtPosting.update({
+            where: {
+              id: postId,
+            },
+            // postingInfor is a js object that contains  amount and interestRate
+            data: postingInfo,
+          })
+        res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting};

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verifyToken from "../middleware/authMiddleware.js";
-import { debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory } from "../controller/userController.js";
+import { debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting } from "../controller/userController.js";
 
 const userRoute = Router()
 
@@ -17,6 +17,8 @@ userRoute.get('/wallet-balance', verifyToken, walletBalance);
 userRoute.get('/activeLendTotal', verifyToken, activeLendTotal);
 userRoute.get('/lendings-history', verifyToken, lendingsHistory);
 userRoute.get('/activeDebtsTotal', verifyToken, activeDebtsTotal);
+userRoute.get('/delete-debtPosting', verifyToken, deleteDebtPosting);
+userRoute.get('/update-debtPosting', verifyToken, updateDebtPosting);
 
 
 

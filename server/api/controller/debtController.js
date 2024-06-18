@@ -3,7 +3,7 @@ import { PrismaClient, Prisma} from '@prisma/client'
 const prisma = new PrismaClient();
 
 //Creates a new debt posting
-const debtPosting = async (req, res) =>{
+const debtPosting = async (req, res) => {
     const { amount, interestRate } = req.body;
     try {
         const user = await prisma.user.findFirst({
@@ -25,7 +25,7 @@ const debtPosting = async (req, res) =>{
     }
 };
 
-const unfulfilledDebts = async (req, res) =>{
+const unfulfilledDebts = async (req, res) => {
     try {
         const currentUnfulfilledDebts = await prisma.debtPosting.findMany({
             where: {
@@ -47,10 +47,9 @@ const unfulfilledDebts = async (req, res) =>{
 };
 
 //Backend logic of lend
-const lend=async(req,res)=>{
-    const {postid}=req.body
+const lend = async (req, res) => {
+    const { postid } = req.body
     try{
-
         //Check user
         const user = await prisma.user.findFirst({
             where: { username: req.username }
@@ -60,61 +59,65 @@ const lend=async(req,res)=>{
         }
 
         //Check posting
-        const posting=await prisma.debtPosting.findFirst({
-            where: {id:postid}
+        const posting = await prisma.debtPosting.findFirst({
+            where: { id: postid }
         });
+
         if (!posting) {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        const userBalance = parseFloat(user.walletBalance, 10);
-        const amount = parseFloat(posting.amount, 10);
+        // const userBalance = parseFloat(user.walletBalance, 2);
+        // const amount = parseFloat(posting.amount, 2);
 
-        //Check walletBalance
-        if(userBalance<amount){
+        const userBalance = parseFloat(user.walletBalance).toFixed(2);
+        const amount = parseFloat(posting.amount).toFixed(2);
+
+
+        //Check walletBalance (Insufficient balance)
+        if(userBalance < amount){
             console.log(user.userBalance)
             console.log(amount)
-            //console.log(user.walletBalance<posting.amount)
             return res.status(400).json({message: 'Insufficient wallet balance'});
-        }else{
-
-            // Perform transactional updates
-            const [lenPost, borrower, lender] = await prisma.$transaction([
-                prisma.debtPosting.update({
-                    where: { id: postid },
-                    data: {
-                        isFulfilled: true,
-                        lenderUsername: req.username
-                    },
-                }),
-                prisma.user.update({
-                    where: { username: posting.borrowerUsername },
-                    data: {
-                        walletBalance: {
-                            increment: amount,
-                        },
-                        activeDebtsTotal: {
-                            increment: amount,
-                        },
-                    },
-                }),
-                prisma.user.update({
-                    where: { username: req.username },
-                    data: {
-                        walletBalance: {
-                            decrement: amount,
-                        },
-                        activeLendTotal: {
-                            increment:amount,
-                        },
-                    },
-                })
-            ]);
-
-
-            res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower });
         }
 
+        // Performs transactional updates
+        const [lenPost, borrower, lender] = await prisma.$transaction([
+            //Marks the debtPosting as fulfilled and assigns the lender
+            prisma.debtPosting.update({
+                where: { id: postid },
+                data: {
+                    isFulfilled: true,
+                    lenderUsername: req.username
+                },
+            }),
+            //Deposists/adds the money to borrower 
+            prisma.user.update({
+                where: { username: posting.borrowerUsername },
+                data: {
+                    walletBalance: {
+                        increment: amount,
+                    },
+                    activeDebtsTotal: {
+                        increment: amount,
+                    },
+                },
+            }),
+            //Withdraws/takes-out money from lender
+            prisma.user.update({
+                where: { username: req.username },
+                data: {
+                    walletBalance: {
+                        decrement: amount,
+                    },
+                    activeLendTotal: {
+                        increment:amount,
+                    },
+                },
+            })
+        ]);
+
+        res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower });
     }catch(error){
         res.status(500).json({ message: 'Failed to lend', error });
     }
