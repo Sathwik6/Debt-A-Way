@@ -46,10 +46,6 @@ const unfulfilledDebts = async (req, res) =>{
 
 };
 
-//Backend login of tradeableDebts
-// const tradeableDebts = async (req, res) =>{
-// }
-
 //Backend logic of lend
 const lend=async(req,res)=>{
     const {postid}=req.body
@@ -122,6 +118,46 @@ const lend=async(req,res)=>{
     }catch(error){
         res.status(500).json({ message: 'Failed to lend', error });
     }
+
+    
 }
 
-export { debtPosting, unfulfilledDebts,lend };
+//Backend Logic to Pay: @ParalyzedPug finish this method
+// const pay= async (req,res)=>{
+// When a user pays back the debt
+// 1.Deduct the users walletBalance by that much (ensure user has valid balance)
+// 2. Add that much amount to lenders wallet
+// 3. Reduce the users DebtsOwed by that much
+// 4. Reduce lenders debts receivable by that much
+// 5.Change the isPaid attribute of that particular debt posting to true
+// } 
+
+//Backend login of tradeableDebts
+const tradableDebts = async (req, res) =>{
+    try {
+        const currentTradableDebts = await prisma.debtPosting.findMany({
+            where: {
+                isFulfilled: true,
+                isTradable:true,
+                //borrowerUsername: { not: req.username } Commented this out to allow users to buyout their own debt
+            },
+            select: {
+                id: true,
+                amount: true,
+                interestRate: true,
+                borrowerUsername: true,
+                tradePrice:true
+            }
+        });
+        res.status(200).json({ message: 'Tradeable Debts Fetched Successfully', tradableDebts: currentTradableDebts });
+    } catch (error) {
+        res.status(500).json({ message: 'Fetching Tradable Debts Failed', error });
+    }
+}
+
+//Backend Logic for Trade
+// const trade=async (req,res)=>{
+
+// }
+
+export { debtPosting, unfulfilledDebts,lend,tradableDebts };
