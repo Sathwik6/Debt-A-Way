@@ -1,12 +1,13 @@
 import axios from "axios"
 import { Toaster, toast } from "sonner"
-import Navbar from "../../Components/Navbar.jsx"
+import Navbar from "../../Components/Navbar/Navbar.jsx"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
-import Header from "../../Components/Header.jsx"
-// import TradableDebts from "../Components/TradableDebts.jsx";
-import NewDebtPosting from "../../Components/NewDebtPosting.jsx";
-import UnfulfilledDebts from "../../Components/UnfulfilledDebts.jsx";
+import Header from "../../Components/Header/Header.jsx"
+import './Home.css'
+import NewDebtPosting from "../../Components/NewDebtPosting/NewDebtPosting.jsx";
+import DebtsOwed from "../../Components/DebtsOwed/DebtsOwed.jsx"
+import DebtsReceivable from "../../Components/DebtsReceivable/DebtsReceivable.jsx"
 
 
 axios.defaults.withCredentials = true;
@@ -31,16 +32,20 @@ function Home(){
 
 
     return (
-        <div>
-            <Navbar />
+        <>
+        <Navbar />
+        <div className="home-page">
             <Header />
             <NewDebtPosting />
-            <UnfulfilledDebts />
-            {/* <TradeableDebts /> */}
+            <DebtsOwed />
+            <DebtsReceivable/>
         </div>
+        
+        
+        </>
 
         
     )
-}
+};
 
 export default Home;

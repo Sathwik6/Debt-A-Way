@@ -2,6 +2,7 @@ import axios from "axios"
 import { Toaster, toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
+import './NewDebtPosting.css'
 
 function NewDebtPosting(){
     const [newDebtForm, setNewDebtFrom] = useState({
@@ -64,7 +65,7 @@ function NewDebtPosting(){
     }
 
     return (
-        <div className="full-width-container">
+        <div className="post-debt-container">
             <h3>Post a New Debt</h3>
             <form className="post-debt-form" onSubmit={handleSubmit}>
                 <input

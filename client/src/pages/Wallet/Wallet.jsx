@@ -1,8 +1,8 @@
 import axios from "axios"
 import React, { useEffect } from "react"
-import Navbar from "../../Components/Navbar"
+import Navbar from "../../Components/Navbar/Navbar.jsx"
 import { useNavigate } from "react-router-dom"
-import Header from "../../Components/Header.jsx";
+import Header from "../../Components/Header/Header.jsx";
 
 function Wallet(){
     const navigate = useNavigate();

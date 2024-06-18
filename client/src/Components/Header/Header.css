@@ -1,0 +1,46 @@
+.tiles-container {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 4%;
+    width: 100%;
+    height: 25%;
+    padding: 0% 5%;
+}
+
+
+.tile {
+    background-color: rgb(114, 137, 218);
+    border-radius: 2vw;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    flex-basis: calc(33% - 2vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    position: relative;
+    padding-bottom: 4vw; 
+}
+.tile:hover{
+    background-color: rgb(87, 105, 169);
+}
+
+.tile-title {
+    color: black;
+    font-size: 2.5%;
+    position: absolute;
+    bottom: -3vw; 
+    width: 100%;
+    text-align: center;
+    font-size: 2vw;
+    font-family: sans-serif;
+}
+
+
+.tile-number {
+    color: white;
+    font-family: sans-serif;
+    font-size: 3vw;
+    margin-top: 3vw;
+}

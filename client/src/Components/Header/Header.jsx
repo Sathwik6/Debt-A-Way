@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
+import './Header.css'
 
 function Header(){
     const navigate = useNavigate();
@@ -48,16 +49,16 @@ function Header(){
     return (
         <div  className="tiles-container">
             <div  className="tile" onClick={() => {navigate("/wallet")}}>
-                <div className="tile-title">Wallet Balance</div>
                 <div className="tile-number">${walletBalance}</div>
+                <div className="tile-title">Wallet Balance</div>
             </div>
             <div  className="tile" onClick={() => {navigate("/debts-owed")}}>
-                <div className="tile-title">Debts Owed</div>
                 <div className="tile-number">${debtsOwed}</div> 
+                <div className="tile-title">Debts Owed</div>
             </div>
             <div  className="tile" onClick={() => {navigate("/debts-receivable")}}>
-                <div className="tile-title">Debts Receivable</div>
                 <div className="tile-number"> ${debtsReceivable}</div> 
+                <div className="tile-title">Debts Receivable</div>
             </div>
         </div>
     );
