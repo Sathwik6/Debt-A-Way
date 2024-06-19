@@ -157,6 +157,7 @@ const updateDebtPosting = async (req, res) =>{
 
 const addWalletBalance = async (req, res) =>{
     const { additionAmount } = req.body;
+
     // validate amount 
     if (isNaN(additionAmount) || additionAmount < 0) {
         return res.status(400).send('Invalid amount');
@@ -174,7 +175,7 @@ const addWalletBalance = async (req, res) =>{
         }
 
         // Calculate the new wallet balance
-        const newWalletBalance = user.walletBalance + additionAmount;
+        const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
 
         // Update the user's wallet balance
         const updatedUser = await prisma.user.update({

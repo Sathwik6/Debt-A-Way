@@ -53,6 +53,8 @@ function Wallet(){
         // send request to back end
         console.log(newWalletForm);
         try {
+            const amount = parseFloat(newWalletForm.amount);
+            
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/add-wallet-balance`, 
                 { additionAmount: newWalletForm.amount },
                 { withCredentials: true } // cookiesss
