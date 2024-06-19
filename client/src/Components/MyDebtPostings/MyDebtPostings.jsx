@@ -26,12 +26,15 @@ function myDebtPostings(){
 
         event.preventDefault()
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/delete-debtPosting`,
-                {postId}
-            );
+            console.log(postId)
+            //Had to change the url as axios delete doesn't take body in the same way as post requests
+            const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/delete-debtPosting`,{
+                params: { postId },
+            });
             console.log(response);
 
             if (response.status == 200){
+                location.reload()
                 console.log("Post deletion Successful");
             }
         }catch (error){

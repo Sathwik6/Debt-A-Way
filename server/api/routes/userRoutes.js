@@ -19,10 +19,12 @@ userRoute.get('/lendings-history', verifyToken, lendingsHistory);
 userRoute.get('/activeDebtsTotal', verifyToken, activeDebtsTotal);
 
 // user post routes
-userRoute.post('/delete-debtPosting', verifyToken, deleteDebtPosting);
 userRoute.post('/update-debtPosting', verifyToken, updateDebtPosting);
 userRoute.post('/add-wallet-balance', verifyToken, addWalletBalance);
 userRoute.post('/pay-debt', verifyToken, payDebt);
+
+//user delete routes
+userRoute.delete('/delete-debtPosting', verifyToken, deleteDebtPosting);
 
 
 

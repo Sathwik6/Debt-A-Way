@@ -126,7 +126,9 @@ const lendingsHistory = async (req, res) =>{
 };
 
 const deleteDebtPosting = async (req, res) =>{
-    const { postId } = req.body;
+    const { postId } = req.query;
+    //console.log(req.params)
+    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.delete({
             where: {
