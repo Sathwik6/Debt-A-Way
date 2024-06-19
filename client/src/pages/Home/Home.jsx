@@ -8,6 +8,7 @@ import './Home.css'
 import NewDebtPosting from "../../Components/NewDebtPosting/NewDebtPosting.jsx";
 import DebtsOwed from "../../Components/DebtsOwed/DebtsOwed.jsx"
 import DebtsReceivable from "../../Components/DebtsReceivable/DebtsReceivable.jsx"
+import Wallet from "../../Components/Wallet/Wallet.jsx"
 
 
 axios.defaults.withCredentials = true;
@@ -39,6 +40,7 @@ function Home(){
             <NewDebtPosting />
             <DebtsOwed/>
             <DebtsReceivable/>
+            <Wallet />
         </div>
         
         

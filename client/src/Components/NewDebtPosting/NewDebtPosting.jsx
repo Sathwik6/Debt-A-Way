@@ -56,10 +56,10 @@ function NewDebtPosting(){
                 interestRate: 0.0
             });
             if (response.status === 200){
-                toast("Debt Posted Successfully")
+                toast.success("Debt Posted Successfully")
             }
         } catch (error) {
-            toast("Debt Posting Failed")
+            toast.error("Debt Posting Failed")
             console.error("Debt Posting Failed:", error);
         }
     }
