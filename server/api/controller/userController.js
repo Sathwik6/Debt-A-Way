@@ -190,50 +190,72 @@ const addWalletBalance = async (req, res) =>{
 };
 
 const payDebt = async (req, res) =>{
-    const { debtId } = req.body;
-
+    //console.log(req.body)
+    const { postid } = req.body;
+    //console.log(postid)
     try{
         const debt = await prisma.debtPosting.findFirst({
-            where: { id: debtId},
+            where: { id: postid},
             include: {
                 borrower: true,
                 lender: true,
+                //amount:true, //This was not being fetched
             }
         });
-        
+        console.log(debt)
         if (!debt) {
             return res.status(404).json({message: "debt not found!"});
         }
 
         const {borrower, lender, amount} = debt;
+
+        //Convert to float to compare
+        const borrowerBalance = parseFloat(borrower.walletBalance, 2);
+        const amt = parseFloat(amount, 2);
+
+        //Not doing the above conversion will lead to 500 error
         // check if the borrower has enough in his wallet
-        if (borrower.walletBalance < amount){
+        if (borrowerBalance < amt){
             return res.status(400).json({message: "insufficient funds! Please add to wallet and try again"})
         }
 
         // transaction
         await prisma.$transaction(async (prisma) => {
 
-        // Minus amount from borrower's wallet
-        await prisma.user.update({
-            where: { username: borrower.username },
-            data: { walletBalance: { decrement: amount } }
+            // Minus amount from borrower's wallet
+            await prisma.user.update({
+                where: { username: borrower.username },
+                data: { walletBalance: { decrement: amt } }
+            });
+
+            // Add amount to lender's wallet
+            await prisma.user.update({
+                where: { username: lender.username },
+                data: { walletBalance: { increment: amt } }
+            });
+
+            // Mark the debt as paid
+            await prisma.debtPosting.update({
+                where: { id: postid },
+                data: { isPaid: true }
+            });
+
+            //Reduce borrowers debt owed
+            await prisma.user.update({
+                where: { username: borrower.username },
+                data: { activeDebtsTotal: { decrement: amt } }
+            });
+
+            //Reduce lenders debts recievable
+            await prisma.user.update({
+                where: { username: lender.username },
+                data: { activeLendTotal: { decrement: amt } }
+            });
+        
+
         });
 
-        // Add amount to lender's wallet
-        await prisma.user.update({
-            where: { username: lender.username },
-            data: { walletBalance: { increment: amount } }
-        });
-
-        // Mark the debt as paid
-        await prisma.debtPosting.update({
-            where: { id: debtId },
-            data: { isPaid: true }
-        });
-    });
-
-    res.json({ message: "Payment successful!" });
+        res.json({ message: "Payment successful!" });
 
     } catch (error) {
         res.status(500).json({ message: error.message });

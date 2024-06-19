@@ -67,17 +67,19 @@ const lend = async (req, res) => {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        // const userBalance = parseFloat(user.walletBalance, 2);
-        // const amount = parseFloat(posting.amount, 2);
+        const userBalance = parseFloat(user.walletBalance, 2);
+        const amount = parseFloat(posting.amount, 2);
 
-        const userBalance = parseFloat(user.walletBalance).toFixed(2);
-        const amount = parseFloat(posting.amount).toFixed(2);
+        //For some reason this is not working
+        // const userBalance = parseInt(user.walletBalance);
+        // const amount = parseInt(posting.amount);
 
 
         //Check walletBalance (Insufficient balance)
         if(userBalance < amount){
-            console.log(user.userBalance)
+            console.log(userBalance)
             console.log(amount)
+            console.log(user)
             return res.status(400).json({message: 'Insufficient wallet balance'});
         }
 

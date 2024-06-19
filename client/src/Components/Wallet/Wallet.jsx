@@ -62,6 +62,7 @@ function Wallet(){
             console.log(response);
             
             if (response.status === 200){
+                location.reload()
                 toast.success("Amount Added to Wallet Successfully")
             }
         } catch (error) {

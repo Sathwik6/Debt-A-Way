@@ -4,9 +4,29 @@ import React, { useEffect, useState } from "react"
 function Debts(){
     const [debtsOwed, setDebtsOwed] = useState([]);
     
-    // const handleClick = async (event,postid)=>{
-    //     
-    // }
+    const handleClick = async (event,postid)=>{
+        event.preventDefault();
+
+
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/pay-debt`,
+                {postid}
+            );
+            console.log(response);
+            // setNewDebtFrom({
+            //     amount: 0,
+            //     interestRate: 0.0
+            // });
+            if (response.status === 200){
+                //toast("Money Lent Successfully")
+                location.reload()
+                console.log("Debt Paid Successfully");
+            }
+        } catch (error) {
+            //toast("Lending Failed")
+            console.error("Pay Failed:", error);
+        }
+    }
 
     useEffect(() => {
         const fetchDebts = async () =>{
