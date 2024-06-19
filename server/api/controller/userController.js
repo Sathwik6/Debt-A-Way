@@ -164,7 +164,7 @@ const addWalletBalance = async (req, res) =>{
     
     try{
         // find previous wallet balance
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: { username: req.username },
             select: { walletBalance: true }
         });
@@ -192,7 +192,7 @@ const payDebt = async (req, res) =>{
     const { debtId } = req.body;
 
     try{
-        const debt = await prisma.debtPosting.findUnique({
+        const debt = await prisma.debtPosting.findFirst({
             where: { id: debtId},
             include: {
                 borrower: true,
