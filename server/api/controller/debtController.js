@@ -210,4 +210,4 @@ const myDebtPostings = async (req, res) =>{
 
 // }
 
-export { debtPosting, unfulfilledDebts,lend,tradableDebts,myDebtPostings,myTradePostings };
+export { debtPosting, unfulfilledDebts, lend, tradableDebts, myDebtPostings, myTradePostings };
