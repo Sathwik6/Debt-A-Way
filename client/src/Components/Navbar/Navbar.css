@@ -1,52 +1,163 @@
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: #fff;
-  padding: 1vw 1vw;
-  width: 100%;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+  font-family: 'Roboto', sans-serif;
 }
 
-
-.navbar-logo {
-  font-size: 2vw;
-}
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.navbar-links-left {
-  margin-right: auto;
-  font-size: 1.4vw;
-}
-
-.navbar-links-right {
-  margin-left: auto;
-  font-size: 1.4vw;
-}
-
-.navbar-links a {
-  color: #fff;
-  text-decoration: none;
-  margin-right: 1vw;
-}
-
-.logout-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-  text-decoration: underline;
-  font-size: inherit;
+* {
+  margin: 0;
   padding: 0;
 }
 
-.logout-button:hover {
-  text-decoration: none;
+i {
+  margin-right: -10rem;
 }
 
+/*----------bootstrap-navbar-css------------*/
+
+.navbar-brand {
+  font-size: 140%;
+  display: flex;
+  align-items: center; 
+}
+
+.navbar-logo {
+  padding: 1vw;
+  color: #fff;
+}
+
+.navbar-mainbg {
+  background-color: #5161ce;
+  padding: 0;
+  height: 7vh; 
+}
+
+#navbarSupportedContent {
+  overflow: hidden;
+  position: relative;
+}
+
+#navbarSupportedContent ul {
+  padding: 0;
+  margin: 0;
+}
+
+#navbarSupportedContent ul li a i {
+  margin-right: 0%;
+}
+
+#navbarSupportedContent li {
+  list-style-type: none;
+  float: left;
+}
+
+#navbarSupportedContent ul li a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 110%;
+  display: block;
+  padding: 2vh 2vw;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+}
+
+
+#navbarSupportedContent > ul > li.active > a {
+  color: #5161ce;
+  background-color: transparent;
+  transition: all 0.7s;
+}
+
+.hori-selector {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  background-color: #fff;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
+  height: 3vh; /* Match the navbar height */
+  margin-top: 0.8vh;
+}
+
+.hori-selector .right,
+.hori-selector .left {
+  position: absolute;
+  width: 2.5vh;
+  height: 2.5vh;
+  background-color: #fff;
+  bottom: -9vh;
+}
+
+.hori-selector .right {
+  right: -2.5vh;
+}
+
+.hori-selector .left {
+  left: -2.5vh;
+}
+
+.hori-selector .right:before,
+.hori-selector .left:before {
+  content: '';
+  position: absolute;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+ /* background-color: #5161ce; */
+}
+
+.hori-selector .right:before {
+  bottom: 0;
+  right: -2.5vh;
+}
+
+.hori-selector .left:before {
+  bottom: 0;
+  left: -2.5vh;
+}
+
+@media(min-width: 1px) {
+  .navbar-expand-custom {
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+  .navbar-expand-custom .navbar-nav {
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  .navbar-expand-custom .navbar-toggler {
+    display: none;
+  }
+  .navbar-expand-custom .navbar-collapse {
+    display: -ms-flexbox!important;
+    display: flex!important;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+  }
+}
+
+.navbar-collapse {
+  display: flex;
+  justify-content: space-between;
+}
+
+#navbarSupportedContent ul li.active a {
+  color: #5161ce;
+  background-color: transparent;
+  transition: all 0.7s;
+}
+
+#navbarSupportedContent ul li a.active {
+  color:  #5161ce;
+}
+
+a.navbar-logo {
+  text-decoration: none;
+}
 

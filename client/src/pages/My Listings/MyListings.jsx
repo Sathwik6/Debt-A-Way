@@ -5,6 +5,7 @@ import MyDebtPostings from "../../Components/MyDebtPostings/MyDebtPostings.jsx";
 import MyTradePostings from "../../Components/MyTradePostings/MyTradePostings.jsx"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
+import './MyListings.css'
 
 
 
