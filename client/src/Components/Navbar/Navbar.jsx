@@ -1,11 +1,10 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import $ from "jquery";
 import { NavLink, useNavigate } from "react-router-dom";
+import $ from "jquery";
 import "./Navbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faShoppingBag, faChartBar, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
-
+import { faSignOutAlt, faShoppingBag, faChartBar, faHome } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,15 +15,14 @@ const Navbar = () => {
       console.log(response);
       navigate("/login");
     } catch (error) {
-      toast.error('Invalid Credentials');
-      console.error("Login failed:", error);
+      console.error("Logout failed:", error);
     }
   };
 
-  useEffect(() => {
-    const updateSelectorPosition = () => {
-      var tabsNewAnim = $('#navbarSupportedContent');
-      var activeItemNewAnim = tabsNewAnim.find('.active');
+  const updateSelectorPosition = () => {
+    var tabsNewAnim = $('#navbarSupportedContent');
+    var activeItemNewAnim = tabsNewAnim.find('.active');
+    if (activeItemNewAnim.length > 0) {
       var itemPosNewAnim = activeItemNewAnim.position();
       var activeWidthNewAnim = activeItemNewAnim.innerWidth();
       var activeHeightNewAnim = activeItemNewAnim.innerHeight();
@@ -35,13 +33,13 @@ const Navbar = () => {
         "width": activeWidthNewAnim + "px",
         "height": activeHeightNewAnim + "px"
       });
-    };
+    }
+  };
 
-    $(document).ready(function () {
-      setTimeout(updateSelectorPosition, 1);
-    });
+  useEffect(() => {
+    updateSelectorPosition();
     $(window).on('resize', function () {
-      setTimeout(updateSelectorPosition, 500);
+      updateSelectorPosition();
     });
     $("#navbarSupportedContent").on("click", "li", function () {
       $('#navbarSupportedContent ul li').removeClass("active");
@@ -50,9 +48,11 @@ const Navbar = () => {
     });
     $(".navbar-toggler").click(function () {
       $(".navbar-collapse").slideToggle(300);
-      setTimeout(updateSelectorPosition);
+      setTimeout(updateSelectorPosition, 300);
     });
   }, []);
+
+
 
   return (
     <nav className="navbar navbar-expand-custom navbar-mainbg">
@@ -60,28 +60,28 @@ const Navbar = () => {
         <i className="fas fa-bars text-white"></i>
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <NavLink className="navbar-brand navbar-logo" activeClassName="active" to="/">Debt-A-Way</NavLink>
+        <NavLink className="navbar-brand navbar-logo" to="/">Debt-A-Way</NavLink>
         <ul className="navbar-nav ml-auto">
           <div className="hori-selector"><div className="left"></div><div className="right"></div></div>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active" to="/home">
-            <FontAwesomeIcon icon={faHome} /> Home
+            <NavLink className="nav-link" to="/home" activeClassName="active">
+              <FontAwesomeIcon icon={faHome} /> Home
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active"  to="/shopping">
-            <FontAwesomeIcon icon={faShoppingBag} /> Shopping
+            <NavLink className="nav-link" to="/shopping" activeClassName="active">
+              <FontAwesomeIcon icon={faShoppingBag} /> Shopping
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active"  to="/mylistings">
-            <FontAwesomeIcon icon={faChartBar} /> My Listings
+            <NavLink className="nav-link" to="/mylistings" activeClassName="active">
+              <FontAwesomeIcon icon={faChartBar} /> My Listings
             </NavLink>
           </li>
           <li className="nav-item">
             <a className="nav-link btn" onClick={handleLogout}>
-            <FontAwesomeIcon icon={faSignOutAlt} /> Log-Out
-              </a>
+              <FontAwesomeIcon icon={faSignOutAlt} /> Log-Out
+            </a>
           </li>
         </ul>
       </div>
