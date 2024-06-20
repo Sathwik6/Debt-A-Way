@@ -54,7 +54,7 @@ i {
 #navbarSupportedContent ul li a {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
-  font-size: 100%;
+  font-size: 110%;
   display: block;
   padding: 2vh 2vw;
   transition-duration: 0.6s;
@@ -79,7 +79,8 @@ i {
   background-color: #fff;
   border-top-left-radius: 2vh;
   border-top-right-radius: 2vh;
-  height: 9vh; /* Match the navbar height */
+  height: 3vh; /* Match the navbar height */
+  margin-top: 0.8vh;
 }
 
 .hori-selector .right,
@@ -88,7 +89,7 @@ i {
   width: 2.5vh;
   height: 2.5vh;
   background-color: #fff;
-  bottom: -10vh;
+  bottom: -9vh;
 }
 
 .hori-selector .right {

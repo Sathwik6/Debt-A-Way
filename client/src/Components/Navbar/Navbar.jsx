@@ -3,6 +3,9 @@ import React, { useEffect } from "react";
 import $ from "jquery";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt, faShoppingBag, faChartBar, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -61,16 +64,24 @@ const Navbar = () => {
         <ul className="navbar-nav ml-auto">
           <div className="hori-selector"><div className="left"></div><div className="right"></div></div>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active" to="/home"><i className="fas fa-tachometer-alt"></i>Home</NavLink>
+            <NavLink className="nav-link" activeClassName="active" to="/home">
+            <FontAwesomeIcon icon={faHome} /> Home
+            </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active"  to="/shopping"><i className="fa fa-shopping-bag"></i>Shopping</NavLink>
+            <NavLink className="nav-link" activeClassName="active"  to="/shopping">
+            <FontAwesomeIcon icon={faShoppingBag} /> Shopping
+            </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" activeClassName="active"  to="/mylistings"><i className="far fa-chart-bar"></i>My Listings</NavLink>
+            <NavLink className="nav-link" activeClassName="active"  to="/mylistings">
+            <FontAwesomeIcon icon={faChartBar} /> My Listings
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link btn" onClick={handleLogout}><i className="fa fa-user"></i>Log-Out</a>
+            <a className="nav-link btn" onClick={handleLogout}>
+            <FontAwesomeIcon icon={faSignOutAlt} /> Log-Out
+              </a>
           </li>
         </ul>
       </div>
