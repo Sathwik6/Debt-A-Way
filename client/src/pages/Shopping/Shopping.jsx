@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react"
 import Header from "../../Components/Header/Header.jsx"
 import UnfullfilledDebts from "../../Components/UnfulfilledDebts/UnfulfilledDebts.jsx";
 import TradableDebts from "../../Components/TradableDebts/TradableDebts.jsx"
-
+import './Shopping.css'
 
 
 axios.defaults.withCredentials = true;
