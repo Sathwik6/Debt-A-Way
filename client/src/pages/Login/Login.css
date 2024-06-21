@@ -4,16 +4,19 @@
     align-items: center;
     height: 100vh;
     width: 100%;
+    overflow: hidden;
+    position: relative;
 }
+
 
 .loader {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
     height: 100%;
     width: 100%;
 }
-
 
 .Login-page{
     display: flex;
