@@ -8,6 +8,14 @@
     padding: 0% 5%;
 }
 
+@media (max-width: 700px) {
+    .tiles-container{
+        flex-direction: column;
+        gap: 3vh;
+        height: 80vh;
+    }
+}
+
 
 .tile {
     background-color: rgb(114, 137, 218);
