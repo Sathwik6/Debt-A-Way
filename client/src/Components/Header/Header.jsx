@@ -48,15 +48,15 @@ function Header(){
 
     return (
         <div  className="tiles-container">
-            <div  className="tile" onClick={() => {navigate("/wallet")}}>
+            <div  className="tile">
                 <div className="tile-number">${walletBalance}</div>
                 <div className="tile-title">Wallet Balance</div>
             </div>
-            <div  className="tile" onClick={() => {navigate("/debts-owed")}}>
+            <div  className="tile">
                 <div className="tile-number">${debtsOwed}</div> 
                 <div className="tile-title">Debts Owed</div>
             </div>
-            <div  className="tile" onClick={() => {navigate("/debts-receivable")}}>
+            <div  className="tile" >
                 <div className="tile-number"> ${debtsReceivable}</div> 
                 <div className="tile-title">Debts Receivable</div>
             </div>

@@ -37,7 +37,7 @@ function Home(){
         <Navbar />
         <div className="home-page">
             <Header />
-            <NewDebtPosting />
+            {/* <NewDebtPosting /> */}
             <DebtsOwed/>
             <DebtsReceivable/>
             <Wallet />
