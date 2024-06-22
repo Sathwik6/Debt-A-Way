@@ -12,7 +12,7 @@ body {
 /*----------bootstrap-navbar-css------------*/
 
 .navbar-brand {
-  font-size: 140%;
+  font-size: 3vh;
   display: flex;
   align-items: center; 
 }
@@ -22,10 +22,12 @@ body {
   color: #fff;
 }
 
+
 .navbar-mainbg {
   background-color: #5161ce;
   padding: 0;
   height: 6.5vh; 
+  width: 100%;
 }
 
 #navbarSupportedContent {
@@ -50,7 +52,7 @@ body {
 #navbarSupportedContent ul li a {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
-  font-size: 100%;
+  font-size: 2vh;
   display: block;
   padding: 2vh 2vw;
   transition-duration: 0.6s;
@@ -76,7 +78,7 @@ body {
   border-top-left-radius: 2vh;
   border-top-right-radius: 2vh;
   height: 3vh; /* Match the navbar height */
-  margin-top: 0.8vh;
+  margin-top: 1vh;
 }
 
 .hori-selector .right,

@@ -46,7 +46,7 @@ function Wallet(){
 
         //Update this to look good
         if (newWalletForm.amount <= 0){
-            toast.warning('Amount Should be atleast $1.');
+            toast.error('Amount Should be atleast $1.');
             return;
         }
 
@@ -76,7 +76,9 @@ function Wallet(){
 
 
     return (
+        
         <div className="add-wallet-container">
+        <Toaster position="top-center" richColors />
         <h3>Add to Wallet</h3>
         <form className="add-wallet-form" onSubmit={handleSubmit}>
             <input

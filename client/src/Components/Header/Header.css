@@ -8,11 +8,22 @@
     padding: 0% 5%;
 }
 
+@media (max-width: 800px) {
+    .tiles-container{
+        flex-direction: column;
+        gap: 4vh;
+        height: 80vh;
+    }
+    .tile{
+        width: 60vw;
+        align-self: start;
+    }
+}
+
 
 .tile {
     background-color: rgb(114, 137, 218);
     border-radius: 2vw;
-    cursor: pointer;
     transition: box-shadow 0.3s ease;
     flex-basis: calc(33% - 2vw);
     display: flex;
@@ -22,9 +33,7 @@
     position: relative;
     padding-bottom: 4vw; 
 }
-.tile:hover{
-    background-color: rgb(87, 105, 169);
-}
+
 
 .tile-title {
     color: black;
