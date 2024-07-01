@@ -1,5 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
+import './MyTradePostings.css'
 
 function myTradePostings(){
     const [myTradePostings, setmyTradePostings] = useState([]);

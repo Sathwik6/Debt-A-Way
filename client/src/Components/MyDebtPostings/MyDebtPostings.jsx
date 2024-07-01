@@ -1,5 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
+import './MyDebtPostings.css'
 
 function myDebtPostings(){
     const [myDebtPostings, setmyDebtPostings] = useState([]);
@@ -73,6 +75,8 @@ function myDebtPostings(){
 
     return (
         <div className="full-width-container">
+            {/*
+        <div className="full-width-container">
             <h3 className="section-heading">My Debt Postings</h3>
             {myDebtPostings.length > 0 ? (
                 <table className="table">
@@ -101,7 +105,65 @@ function myDebtPostings(){
             ) : (
                 <p>You don't have debt postings.</p>
             )}
-        </div> 
+        </div> */}
+
+            <Typography variant="h3" className="section-heading">My Debt Postings</Typography>
+            {myDebtPostings.length > 0 ? (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Amount</TableCell>
+                                <TableCell>Interest Rate</TableCell>
+                                <TableCell>Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {myDebtPostings.map((debt) => (
+                                <TableRow key={debt.id}>
+                                    <TableCell>{debt.borrowerUsername}</TableCell>
+                                    <TableCell>{debt.amount}</TableCell>
+                                    <TableCell>{debt.interestRate}%</TableCell>
+                                    <TableCell>
+                                    <Button
+                                            variant="contained"
+                                            sx={{
+                                                backgroundColor: 'rgb(114, 137, 218)',
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgb(90, 107, 168)',
+                                                }
+                                            }}
+                                            onClick={(event) => handleCancel(event, debt.id)}
+                                        >
+                                            Delete
+                                        </Button>
+
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                backgroundColor: 'rgb(114, 137, 218)',
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgb(90, 107, 168)',
+                                                }
+                                            }}
+                                            onClick={(event) => handleUpdate(event, debt.id)}
+                                        >
+                                            Update
+                                        </Button>
+
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <Typography>You don't have debt postings.</Typography>
+            )}
+        </div>
     );
 }
 
