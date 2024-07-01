@@ -36,11 +36,14 @@ function Home(){
         <>
         <Navbar />
         <div className="home-page">
-            <Header />
-            {/* <NewDebtPosting /> */}
-            <DebtsOwed/>
-            <DebtsReceivable/>
+            <Header className="header"/>
+            <div className="home-tables">
+                <DebtsOwed/>
+                <DebtsReceivable/>
+            </div>
+            
             <Wallet />
+            
         </div>
         
         

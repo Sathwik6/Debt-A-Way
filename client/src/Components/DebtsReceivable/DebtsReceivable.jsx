@@ -23,7 +23,7 @@ function Lendings(){
 
     return (
         <div className="full-width-container">
-            <h3 className="section-heading">Lendings</h3>
+            <h3 className="section-heading">Lendings</h3> 
             {debtsReceivable.length > 0 ? (
                 <table className="table">
                     <thead>

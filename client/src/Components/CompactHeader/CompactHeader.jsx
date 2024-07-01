@@ -1,9 +1,8 @@
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
-import './Header.css'
+import './CompactHeader.css';
 
-function Header(){
+const CompactHeader = () => {
     const [debtsOwed, setDebtsOwed] = useState(0);
     const [walletBalance, setWalletBalance] = useState(0);
     const [debtsReceivable, setDebtsReceivable] = useState(0);
@@ -45,22 +44,39 @@ function Header(){
         }
     };
 
-    return (
-        <div  className="tiles-container">
-            <div  className="tile">
-                <div className="tile-number">${walletBalance}</div>
-                <div className="tile-title">Wallet Balance</div>
-            </div>
-            <div  className="tile">
-                <div className="tile-number">${debtsOwed}</div> 
-                <div className="tile-title">Debts Owed</div>
-            </div>
-            <div  className="tile" >
-                <div className="tile-number"> ${debtsReceivable}</div> 
-                <div className="tile-title">Debts Receivable</div>
-            </div>
-        </div>
-    );
-}
 
-export default Header;
+
+
+
+
+    return (
+        <div className="compact-header">
+            <div>
+                <h7>
+                    Debts Owed
+                </h7>
+                <div className="compact-number">${debtsOwed}</div> 
+            </div>
+
+
+            <div>
+                <h7>
+                Debts Recievable
+                </h7>
+                <div className="compact-number"> ${debtsReceivable}</div> 
+            </div>
+
+
+            <div>
+                <h7>
+                Balance
+                </h7>
+                <div className="compact-number">${walletBalance}</div>
+            </div>
+            
+        </div>
+    )
+};
+
+
+export default CompactHeader;

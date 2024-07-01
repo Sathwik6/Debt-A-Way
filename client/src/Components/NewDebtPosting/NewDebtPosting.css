@@ -1,17 +1,23 @@
 .post-debt-container{
-    height: 30%;
+    height: 30vh;
     border-color: rgb(201, 201, 201);
-    width: 30%;
-    margin-left: 37%;
-    margin-top: 8%;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    border-radius: 8px;
+    width: 27.5vw;
+    margin-left: 67.5vw;
+    margin-top: -12%;
+    border-radius: 10px;
     padding: 1vw;
+    background-color: rgb(245, 245, 245);
+    font-size: 1.8vw;
+    text-align: center;
+}
 
+@media (max-width: 800px){
+    .post-debt-container{
+        width: 20rem;
+        height: 10rem;
+        font-size: 1rem;
+        margin-left: 80vw;
+    }
 }
 
 .post-debt-form{

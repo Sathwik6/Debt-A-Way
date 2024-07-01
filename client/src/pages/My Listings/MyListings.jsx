@@ -6,6 +6,7 @@ import MyTradePostings from "../../Components/MyTradePostings/MyTradePostings.js
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import './MyListings.css'
+import NewDebtPosting from "../../Components/NewDebtPosting/NewDebtPosting.jsx";
 
 
 
@@ -34,8 +35,11 @@ function MyListings(){
         <>
         <Navbar />
         <div className="myListings-page">
-            <MyDebtPostings/>
-            <MyTradePostings/>
+            <div className="tables">
+                <MyDebtPostings/>
+                <MyTradePostings/>
+            </div>
+                <NewDebtPosting /> 
         </div>
         
         

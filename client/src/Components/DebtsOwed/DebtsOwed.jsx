@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
+import './DebtsOwed.css'
 
 function Debts(){
     const [debtsOwed, setDebtsOwed] = useState([]);
@@ -43,7 +44,7 @@ function Debts(){
 
     return (
         <div className="full-width-container">
-            <h3 className="section-heading">Debts</h3>
+            <h3 className="section-heading">Debts Owed</h3>
             {debtsOwed.length > 0 ? (
                 <table className="table">
                     <thead>
@@ -68,7 +69,7 @@ function Debts(){
                     </tbody>
                 </table>
             ) : (
-                <p>No Debts Available.</p>
+                <p className="message">No Debts Available.</p>
             )}
         </div> 
     );

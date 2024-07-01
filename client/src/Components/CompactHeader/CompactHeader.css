@@ -1,0 +1,33 @@
+.compact-header{
+    border-color: rgb(201, 201, 201);
+    width: 27.5vw;
+    margin-left: 67.5vw;
+    margin-top: -12%;
+    border-radius: 10px;
+    padding: 1vw;
+    background-color: rgb(114, 137, 218);
+    color: white;
+    font-size: 1.8vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@media (max-width: 800px){
+    .compact-header{
+        width: 17rem;
+        height: 10rem;
+        font-size: 1rem;
+        margin-left: 90vw;
+        margin-right: 10vw;
+    }
+}
+
+.compact-number{
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+
+

@@ -1,10 +1,9 @@
-.debts-owed-container{
-    margin-top: 7%;
-    width: 64%;
-    padding-left: 5%;
-    background-color: aqua;
+
+.full-width-container h3{
+    font-size: 200%;
+    margin-top: 4vh;
 }
-.debts-owed-container h1{
-    font-size: 2vw;
-    font-weight: 500;
+
+.section-heading{
+    margin-bottom: 2vh;
 }

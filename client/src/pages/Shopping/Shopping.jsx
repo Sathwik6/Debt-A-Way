@@ -3,9 +3,9 @@ import { Toaster, toast } from "sonner"
 import Navbar from "../../Components/Navbar/Navbar.jsx"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
-import Header from "../../Components/Header/Header.jsx"
 import UnfullfilledDebts from "../../Components/UnfulfilledDebts/UnfulfilledDebts.jsx";
-import TradableDebts from "../../Components/TradableDebts/TradableDebts.jsx"
+import TradableDebts from "../../Components/TradableDebts/TradableDebts.jsx";
+import CompactHeader from "../../Components/CompactHeader/CompactHeader.jsx";
 import './Shopping.css'
 
 
@@ -32,13 +32,14 @@ function Shopping(){
 
     return (
         <>
-        <Navbar />
+             <Navbar />
         <div className="shopping-page">
-            <Header/>
-            <UnfullfilledDebts/>
-            <TradableDebts/>
-        </div>
-        
+            <div className="tables">
+                <UnfullfilledDebts/>
+                <TradableDebts/>
+            </div>
+                <CompactHeader />
+             </div>
         
         </>
 
