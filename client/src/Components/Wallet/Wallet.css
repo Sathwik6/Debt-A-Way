@@ -9,6 +9,7 @@
     font-size: 1rem;
     text-align: center;    
     margin-top: -25rem;
+    margin-bottom: 1rem;
 }
 @media (max-width: 800px){
     .add-wallet-container{

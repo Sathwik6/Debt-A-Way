@@ -1,18 +1,33 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography,  Box, TextField  } from "@mui/material";
-import './UnfulfilledDebts.css'
+import './UnfulfilledDebts.css';
+import { styled } from "@mui/system";
 
 function unfulfilledDebts(){
     const [unfulfilledDebts, setUnfulfilledDebts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const recordsPerPage = 10;
+    const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
     const [inputPage, setInputPage] = useState(1);
     const records = unfulfilledDebts.slice(firstIndex, lastIndex);
     const npage = Math.ceil(unfulfilledDebts.length / recordsPerPage);
     const numbers = [...Array(npage + 1).keys()].slice(1)
+
+    const StyledTableCell = styled(TableCell)({
+        padding: '4px 8px',
+        fontSize: '0.875rem',
+      });
+
+    const StyledTableRow = styled(TableRow)({
+        '&:nth-of-type(even)': {
+          backgroundColor: '#f9f9f9',
+        },
+        '&:hover': {
+            backgroundColor: 'yellow',
+        },
+    });
 
     // const [newDebtForm, setNewDebtFrom] = useState({
     //     amount: 0,
@@ -88,7 +103,7 @@ function unfulfilledDebts(){
 
     return (
         <div className="full-width-container">
-            <Typography variant="h3" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Unfulfilled Debt Postings</Typography>
+            <Typography variant="h6" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Unfulfilled Debt Postings</Typography>
             {unfulfilledDebts.length > 0 ? (
                 <>
                 <TableContainer component={Paper}>
@@ -103,11 +118,11 @@ function unfulfilledDebts(){
                         </TableHead>
                         <TableBody>
                             {unfulfilledDebts.map((debt) => (
-                                <TableRow key={debt.id}>
-                                    <TableCell>{debt.borrowerUsername}</TableCell>
-                                    <TableCell>{debt.amount}</TableCell>
-                                    <TableCell>{debt.interestRate}%</TableCell>
-                                    <TableCell>
+                                <StyledTableRow key={debt.id}>
+                                    <StyledTableCell>{debt.borrowerUsername}</StyledTableCell>
+                                    <StyledTableCell>{debt.amount}</StyledTableCell>
+                                    <StyledTableCell>{debt.interestRate}%</StyledTableCell>
+                                    <StyledTableCell>
                                     <Button
                                             variant="contained"
                                             sx={{
@@ -115,14 +130,17 @@ function unfulfilledDebts(){
                                                 color: '#fff',
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
-                                                }
+                                                },
+                                                height: '3.8vh',
+                                                mb: '0.1rem',
+                                                width: '5.2rem',
                                             }}
                                             onClick={(event) => handleLendClick(event, debt.id)}
                                         >
                                             Lend
                                         </Button>
-                                    </TableCell>
-                                </TableRow>
+                                    </StyledTableCell>
+                                </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
@@ -139,6 +157,8 @@ function unfulfilledDebts(){
                               backgroundColor: 'rgb(90, 107, 168)',
                           },
                           mx: 1,
+                          height: '3.8vh',
+                          width: '4rem',
                       }}
                   >
                       Prev
@@ -162,6 +182,8 @@ function unfulfilledDebts(){
                               backgroundColor: 'rgb(90, 107, 168)',
                           },
                           mx: 1,
+                          height: '3.8vh',
+                          width: '4rem',
                       }}
                   >
                       Next

@@ -14,9 +14,10 @@
 
 .postdebtbox{
 
-    margin-top: 4rem;
-    margin-right: 23rem;
-    margin-bottom: 10rem;
+    margin-top: 3rem;
+    margin-right: 15rem;
+    margin-bottom: 9.5rem;
+    margin-left: 8rem;
 }
 
 @media (max-width: 1127px) {

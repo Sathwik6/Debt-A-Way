@@ -1,6 +1,7 @@
 .compact-header{
     border-color: rgb(201, 201, 201);
     width: 27.5vw;
+    height: 70vh;
     margin-left: 67.5vw;
     border-radius: 10px;
     padding: 1rem;
@@ -14,6 +15,22 @@
     font-weight: 700;
     margin-top: 20vh;
     position: absolute;
+}
+.compact-element-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.compact-header .compact-title{
+    margin-bottom: 4rem;
+    font-size: 1.5rem;
+}
+.compact-number{
+    margin-bottom: 0%;
+    color: white;
+    font-weight: 300;
+    font-size: 2rem;
 }
 
 @media (max-width: 900px){

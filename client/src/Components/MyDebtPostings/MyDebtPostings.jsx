@@ -1,18 +1,32 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box, TextField } from "@mui/material";
-
+import { styled } from "@mui/system";
 
 function myDebtPostings(){
     const [myDebtPostings, setmyDebtPostings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const recordsPerPage = 10;
+    const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
     const [inputPage, setInputPage] = useState(1);
     const records = myDebtPostings.slice(firstIndex, lastIndex);
     const npage = Math.ceil(myDebtPostings.length / recordsPerPage);
     const numbers = [...Array(npage + 1).keys()].slice(1)
+
+    const StyledTableCell = styled(TableCell)({
+        padding: '4px 8px',
+        fontSize: '0.875rem',
+      });
+
+    const StyledTableRow = styled(TableRow)({
+        '&:nth-of-type(even)': {
+          backgroundColor: '#f9f9f9',
+        },
+        '&:hover': {
+            backgroundColor: 'yellow',
+        },
+    });
      
     useEffect(() => {
         const fetchDebtPostings = async () =>{
@@ -113,7 +127,7 @@ function myDebtPostings(){
 
     return (
         <div className="full-width-container">
-            <Typography variant="h3" sx={{ fontWeight: '1000', mb: '1rem' }} className="section-heading">My Debt Postings</Typography>
+            <Typography variant="h6" sx={{ fontWeight: '1000', mb: '1rem' }} className="section-heading">My Debt Postings</Typography>
             {myDebtPostings.length > 0 ? (
                 <>
                 <TableContainer component={Paper}>
@@ -128,11 +142,11 @@ function myDebtPostings(){
                         </TableHead>
                         <TableBody>
                             {records.map((debt) => (
-                                <TableRow key={debt.id}>
-                                    <TableCell>{debt.borrowerUsername}</TableCell>
-                                    <TableCell>{debt.amount}</TableCell>
-                                    <TableCell>{debt.interestRate}%</TableCell>
-                                    <TableCell>
+                                <StyledTableRow key={debt.id}>
+                                    <StyledTableCell>{debt.borrowerUsername}</StyledTableCell>
+                                    <StyledTableCell>{debt.amount}</StyledTableCell>
+                                    <StyledTableCell>{debt.interestRate}%</StyledTableCell>
+                                    <StyledTableCell>
                                         <Button
                                             variant="contained"
                                             sx={{
@@ -141,9 +155,9 @@ function myDebtPostings(){
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
                                                 },
+                                                height: '3.8vh',
+                                                mb: '0.1rem',
                                                 mr: '3rem', 
-                                                mt: '1rem',
-                                                mb:'1rem'
                                             }}
                                             onClick={(event) => handleCancel(event, debt.id)}
                                         >
@@ -157,15 +171,17 @@ function myDebtPostings(){
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
                                                 },
-                                                mt: '1rem',
-                                                mb:'1rem',
+                                                height: '3.8vh',
+                                                mb: '0.1rem',
+                                                width: '5.2rem',
+
                                             }}
                                             onClick={(event) => handleUpdate(event, debt.id)}
                                         >
                                             Update
                                         </Button>
-                                    </TableCell>
-                                </TableRow>
+                                    </StyledTableCell>
+                                </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
@@ -182,6 +198,8 @@ function myDebtPostings(){
                             backgroundColor: 'rgb(90, 107, 168)',
                         },
                         mx: 1,
+                        height: '3.8vh',
+                        width: '4rem',
                     }}
                 >
                     Prev
@@ -205,6 +223,8 @@ function myDebtPostings(){
                             backgroundColor: 'rgb(90, 107, 168)',
                         },
                         mx: 1,
+                        height: '3.8vh',
+                        width: '4rem',
                     }}
                 >
                     Next
