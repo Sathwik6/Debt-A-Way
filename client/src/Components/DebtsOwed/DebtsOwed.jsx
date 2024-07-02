@@ -1,6 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import './DebtsOwed.css'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
 
 function Debts(){
     const [debtsOwed, setDebtsOwed] = useState([]);
@@ -44,33 +45,51 @@ function Debts(){
 
     return (
         <div className="full-width-container">
-            <h3 className="section-heading">Debts Owed</h3>
+            <Typography variant="h3" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Debts Owed</Typography>
             {debtsOwed.length > 0 ? (
-                <table className="table">
-                    <thead>
-                        <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Interest Rate</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {debtsOwed.map(debt => (
-                            <tr key={debt.id}>
-                                <td>{debt.lenderUsername}</td>
-                                <td>{debt.amount}</td>
-                                <td>{debt.interestRate}%</td>
-                                <td>
-                                    <button onClick={(event) => handleClick(event, debt.id)}>Pay</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow >
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}} >Name</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Amount</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Interest Rate</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {debtsOwed.map((debt) => (
+                                <TableRow key={debt.id}>
+                                    <TableCell>{debt.lenderUsername}</TableCell>
+                                    <TableCell>{debt.amount}</TableCell>
+                                    <TableCell>{debt.interestRate}%</TableCell>
+                                    <TableCell>
+                                    <Button
+                                            variant="contained"
+                                            sx={{
+                                                backgroundColor: 'rgb(114, 137, 218)',
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgb(90, 107, 168)',
+                                                }
+                                            }}
+                                           onClick={(event) => handleClick(event, debt.id)}
+                                        >
+                                            Pay
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             ) : (
-                <p className="message">No Debts Available.</p>
+                <Typography
+                sx={{
+                    mt: '0.8rem',
+                }}>No Debts Available.</Typography>
             )}
+        
         </div> 
     );
 }

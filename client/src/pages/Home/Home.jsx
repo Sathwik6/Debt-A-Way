@@ -41,8 +41,10 @@ function Home(){
                 <DebtsOwed/>
                 <DebtsReceivable/>
             </div>
-            
-            <Wallet />
+            <div className="wallet">
+                <Wallet />
+            </div>
+           
             
         </div>
         
