@@ -12,10 +12,10 @@ function unfulfilledDebts(){
 
     const handleLendClick = async (event,postid)=>{
         event.preventDefault();
-
+        console.log(postid);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/debt/lend`,
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/lend`,
                 {postid}
             );
             console.log(response);

@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react"
 
 function Lendings(){
     const [debtsReceivable, setDebtsReceivable] = useState([]);
-    
-    // const handleClick = async (event,postid)=>{
-    //     
-    // }
+    const [isClicked,setIsClicked]=useState(false);
+    const handleClick = async (event)=>{
+        
+    }
 
     useEffect(() => {
         const fetchDebts = async () =>{
@@ -41,7 +41,7 @@ function Lendings(){
                                 <td>{debt.amount}</td>
                                 <td>{debt.interestRate}%</td>
                                 <td>
-                                    <button onClick={(event) => handleClick(event, debt.id)}>Trade</button>
+                                    <button onClick={(event) => handleClick(event, debt.id,)}>Trade</button>
                                 </td>
                             </tr>
                         ))}
