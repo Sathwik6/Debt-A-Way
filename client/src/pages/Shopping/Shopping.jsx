@@ -38,7 +38,10 @@ function Shopping(){
                 <UnfullfilledDebts/>
                 <TradableDebts/>
             </div>
+            <div className="compactheader">
                 <CompactHeader />
+            </div>
+                
              </div>
         
         </>

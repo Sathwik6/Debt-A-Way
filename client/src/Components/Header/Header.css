@@ -15,8 +15,20 @@
         height: 80vh;
     }
     .tile{
-        width: 60vw;
+        width: 20rem;
         align-self: start;
+        font-size: 1rem;
+    }
+    .tile-number {
+        color: white;
+        font-family: sans-serif;
+        font-size: 1rem;
+        
+    }
+    .tile-title {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
     }
 }
 
