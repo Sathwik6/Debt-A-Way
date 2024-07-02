@@ -44,7 +44,7 @@ function Home(){
             <div className="wallet">
                 <Wallet />
             </div>
-           
+           <div className="footer"> </div>
             
         </div>
         

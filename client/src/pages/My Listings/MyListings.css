@@ -12,3 +12,19 @@
     margin-left: 2vw;
 }
 
+.postdebtbox{
+    margin-top: -28vh;
+    margin-right: 15rem;
+}
+
+@media (max-width: 1127px) {
+    .postdebtbox{
+        margin-left: 7rem;
+        margin-right: 120vw;
+    }    
+}
+
+.footer{
+    margin-bottom: 15vh;
+}
+

@@ -39,10 +39,12 @@ function MyListings(){
                 <MyDebtPostings/>
                 <MyTradePostings/>
             </div>
+            <div className="postdebtbox">
                 <NewDebtPosting /> 
+            </div>
+                
         </div>
-        
-        
+        <div className="footer"> </div>
         </>
 
         
