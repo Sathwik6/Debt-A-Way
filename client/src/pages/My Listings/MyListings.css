@@ -7,8 +7,27 @@
 }
 
 
-.tables{
-    margin-top: 3%;
+.listing-tables{
+    margin-top: -25rem;
     margin-left: 2vw;
+}
+
+.postdebtbox{
+
+    margin-top: 4rem;
+    margin-right: 23rem;
+    margin-bottom: 10rem;
+}
+
+@media (max-width: 1127px) {
+    .postdebtbox{
+        margin-left: 7rem;
+        margin-right: 120vw;
+        margin-bottom: 10rem;
+    }    
+}
+
+.botton-table{
+    margin-bottom: 5rem;
 }
 

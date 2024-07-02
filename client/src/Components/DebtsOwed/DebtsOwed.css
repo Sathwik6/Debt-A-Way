@@ -1,9 +1,9 @@
 
-.full-width-container h3{
-    font-size: 200%;
-    margin-top: 4vh;
+.full-width-container{ 
+    margin-bottom: 4rem;
 }
 
-.section-heading{
-    margin-bottom: 2vh;
+.full-width-container h3{
+    font-size: 220%;
 }
+
