@@ -4,7 +4,7 @@
     text-align: center;
     margin-top: 4%;
     width: 100%;
-    height: 25%;
+    height: 15rem;
     padding: 0% 5%;
 }
 
@@ -13,6 +13,7 @@
         flex-direction: column;
         gap: 4vh;
         height: 80vh;
+        margin-bottom: 65rem;
     }
     .tile{
         width: 20rem;

@@ -141,7 +141,9 @@ function myDebtPostings(){
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
                                                 },
-                                                mr: '3rem',
+                                                mr: '3rem', 
+                                                mt: '1rem',
+                                                mb:'1rem'
                                             }}
                                             onClick={(event) => handleCancel(event, debt.id)}
                                         >
@@ -154,7 +156,9 @@ function myDebtPostings(){
                                                 color: '#fff',
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
-                                                }
+                                                },
+                                                mt: '1rem',
+                                                mb:'1rem',
                                             }}
                                             onClick={(event) => handleUpdate(event, debt.id)}
                                         >

@@ -41,11 +41,10 @@ function MyListings(){
             <div className="listing-tables">
                 <MyDebtPostings/>
                 <div className="botton-table">
-                <MyTradePostings/>
+                    <MyTradePostings/>
                 </div>
             </div>
         </div>
-        <div className="footer"> hi</div>
         </>
 
         

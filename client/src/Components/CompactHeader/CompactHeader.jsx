@@ -51,7 +51,7 @@ const CompactHeader = () => {
 
     return (
         <div className="compact-header">
-            <div>
+            <div className="compact-element-container">
                 <h7 className="compact-title">
                     Debts Owed
                 </h7>
@@ -59,7 +59,7 @@ const CompactHeader = () => {
             </div>
 
 
-            <div>
+            <div className="compact-element-container">
                 <h7 className="compact-title">
                 Debts Recievable
                 </h7>
@@ -67,7 +67,7 @@ const CompactHeader = () => {
             </div>
 
 
-            <div>
+            <div className="compact-element-container">
                 <h7 className="compact-title">
                 Balance
                 </h7>

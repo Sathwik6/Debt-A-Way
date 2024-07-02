@@ -27,6 +27,12 @@
         flex-direction: column;
         justify-content: space-between;
     }
+
+    .compact-element-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
     .compact-header .compact-title{
         margin-bottom: 4rem;
         font-size: 1.5rem;
