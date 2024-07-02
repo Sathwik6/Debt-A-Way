@@ -6,6 +6,7 @@ import { styled } from "@mui/system";
 
 function Lendings(){
     const [debtsReceivable, setDebtsReceivable] = useState([]);
+
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
@@ -42,6 +43,38 @@ function Lendings(){
         fetchDebts();
     }, []);
 
+
+    const handleTradeDebt = async () => {
+        if (!tradePrice) {
+          alert('Please enter a trade price');
+          return;
+        }
+    
+        console.log(tradePrice);
+        try {
+          const postid=selectedDebtForTrade
+          const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
+                {postid,tradePrice} 
+                //{ tradePrice } // Replace 'your_token' with actual token
+            );
+            console.log(response);
+          handleCloseTradeModal();
+          // Refresh your debts list here
+        } catch (error) {
+          console.error('Error trading debt:', error);
+        }
+    };
+
+    const handleOpenTradeModal = (debtId) => {
+        setSelectedDebtForTrade(debtId);
+        setIsTradeModalOpen(true);
+    };
+    
+    const handleCloseTradeModal = () => {
+        setIsTradeModalOpen(false);
+        setSelectedDebtForTrade(null);
+        setTradePrice('');
+    };
 
     function nextPage() {
         if (currentPage < npage) {
