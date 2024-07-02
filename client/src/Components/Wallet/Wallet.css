@@ -3,20 +3,21 @@
     border-color: rgb(201, 201, 201);
     width: 27.5vw;
     margin-left: 67.5vw;
-    margin-top: -12%;
     border-radius: 10px;
     padding: 1vw;
     background-color: rgb(245, 245, 245);
-    font-size: 1.8vw;
-    text-align: center;
+    font-size: 1rem;
+    text-align: center;    
+    margin-top: -25rem;
 }
 @media (max-width: 800px){
     .add-wallet-container{
-        margin-top: -39.2rem;
         width: 20rem;
         height: 10rem;
         font-size: 1rem;
-        margin-left: 80vw;
+        margin-left: 27rem;
+        margin-top: -87rem;
+        margin-bottom: 35rem;
     }
 }
 

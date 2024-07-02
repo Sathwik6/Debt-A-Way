@@ -10,3 +10,13 @@
 .header{
     display: flex;
 }
+
+.compactheader{
+    margin-top: -5rem;
+}
+
+
+.shopping-tables{
+    margin-top: 7rem;
+    margin-left: 2vw;
+}

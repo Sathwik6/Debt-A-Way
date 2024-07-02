@@ -37,7 +37,10 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(userPayload, jwtConfig.secret, jwtConfig.options);
 
         // Store the token in an HTTP-only cookie
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: false, // Set secure flag to true when in production
+        });
 
         // Send response to the client
         res.status(200).json({ message: 'Login successful'});

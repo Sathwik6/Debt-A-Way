@@ -2,9 +2,8 @@
     border-color: rgb(201, 201, 201);
     width: 27.5vw;
     margin-left: 67.5vw;
-    margin-top: -12%;
     border-radius: 10px;
-    padding: 1vw;
+    padding: 1rem;
     background-color: rgb(114, 137, 218);
     color: white;
     font-size: 1.8vw;
@@ -12,21 +11,45 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    font-weight: 700;
+    margin-top: 20vh;
+    position: absolute;
 }
 
-@media (max-width: 800px){
+@media (max-width: 900px){
     .compact-header{
         width: 17rem;
-        height: 10rem;
+        height: 80vh;
         font-size: 1rem;
-        margin-left: 90vw;
-        margin-right: 10vw;
+        margin-left: 30rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .compact-element-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .compact-header .compact-title{
+        margin-bottom: 4rem;
+        font-size: 1.5rem;
+    }
+    .compact-number{
+        margin-bottom: 0%;
+        color: white;
+        font-weight: 300;
+        font-size: 2rem;
     }
 }
 
 .compact-number{
-    margin-top: 3%;
+    margin-top: 1%;
     margin-bottom: 3%;
+    color: white;
+    font-weight: 300;
 }
 
 

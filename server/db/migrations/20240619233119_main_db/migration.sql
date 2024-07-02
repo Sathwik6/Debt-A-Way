@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "activeDebtsTotal" DECIMAL(65,30) NOT NULL DEFAULT 0.00,
+ADD COLUMN     "activeLendTotal" DECIMAL(65,30) NOT NULL DEFAULT 0.00;

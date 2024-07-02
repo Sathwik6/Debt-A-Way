@@ -4,9 +4,14 @@
     position: relative;
     overflow-y:auto;
     overflow-x: auto;
+    margin-bottom: 50rem;
 }
 
 .home-tables{
-    margin-top: 13vh;
-    margin-left: 5vw;
+    margin-top: -18rem;
+    margin-left: 5vw;   
+    margin-bottom: 5rem;
+}
+.wallet{
+    margin-top: 35rem;
 }

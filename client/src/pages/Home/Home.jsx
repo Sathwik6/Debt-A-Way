@@ -37,12 +37,13 @@ function Home(){
         <Navbar />
         <div className="home-page">
             <Header className="header"/>
+            <div className="wallet">
+                <Wallet />
+            </div>
             <div className="home-tables">
                 <DebtsOwed/>
                 <DebtsReceivable/>
             </div>
-            
-            <Wallet />
             
         </div>
         
