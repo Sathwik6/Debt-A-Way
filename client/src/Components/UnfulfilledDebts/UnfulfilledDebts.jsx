@@ -51,16 +51,16 @@ function unfulfilledDebts(){
 
     return (
         <div className="full-width-container">
-            <Typography variant="h3" className="section-heading">Unfulfilled Debt Postings</Typography>
+            <Typography variant="h3" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Unfulfilled Debt Postings</Typography>
             {unfulfilledDebts.length > 0 ? (
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
-                            <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Interest Rate</TableCell>
-                                <TableCell>Action</TableCell>
+                            <TableRow >
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}} >Name</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Amount</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Interest Rate</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -90,7 +90,10 @@ function unfulfilledDebts(){
                     </Table>
                 </TableContainer>
             ) : (
-                <Typography>No unfulfilled debt postings available.</Typography>
+                <Typography
+                sx={{
+                    mt: '0.8rem',
+                }}>No unfulfilled debt postings available.</Typography>
             )}
         </div>
     );

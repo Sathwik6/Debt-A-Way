@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from "@mui/material";
-import './MyDebtPostings.css'
+
 
 function myDebtPostings(){
     const [myDebtPostings, setmyDebtPostings] = useState([]);
@@ -75,48 +75,17 @@ function myDebtPostings(){
 
     return (
         <div className="full-width-container">
-            {/*
-        <div className="full-width-container">
-            <h3 className="section-heading">My Debt Postings</h3>
-            {myDebtPostings.length > 0 ? (
-                <table className="table">
-                    <thead>
-                        <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Interest Rate</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {myDebtPostings.map(debt => (
-                            <tr key={debt.id}>
-                                <td>{debt.borrowerUsername}</td>
-                                <td>{debt.amount}</td>
-                                <td>{debt.interestRate}%</td>
-                                <td>
-                                    <button onClick={(event) => handleCancel(event, debt.id)}>Cancel</button>
-                                    <button onClick={(event) => handleUpdate(event, debt.id)}>Update</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            ) : (
-                <p>You don't have debt postings.</p>
-            )}
-        </div> */}
 
-            <Typography variant="h3" className="section-heading">My Debt Postings</Typography>
+            <Typography variant="h3" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">My Debt Postings</Typography>
             {myDebtPostings.length > 0 ? (
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Interest Rate</TableCell>
-                                <TableCell>Action</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Name</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Amount</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Interest Rate</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -133,7 +102,8 @@ function myDebtPostings(){
                                                 color: '#fff',
                                                 '&:hover': {
                                                     backgroundColor: 'rgb(90, 107, 168)',
-                                                }
+                                                },
+                                                mr: '3rem',
                                             }}
                                             onClick={(event) => handleCancel(event, debt.id)}
                                         >
@@ -161,7 +131,10 @@ function myDebtPostings(){
                     </Table>
                 </TableContainer>
             ) : (
-                <Typography>You don't have debt postings.</Typography>
+                <Typography
+                sx={{
+                    mt: '0.8rem',
+                }}>You don't have debt postings.</Typography>
             )}
         </div>
     );
