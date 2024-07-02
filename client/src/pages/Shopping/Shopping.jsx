@@ -34,16 +34,14 @@ function Shopping(){
         <>
              <Navbar />
         <div className="shopping-page">
-            <div className="tables">
+        <div className="compactheader">
+                <CompactHeader />
+            </div>
+            <div className="shopping-tables">
                 <UnfullfilledDebts/>
                 <TradableDebts/>
             </div>
-            <div className="compactheader">
-                <CompactHeader />
-            </div>
-                
              </div>
-             <div className="footer"> </div>
         </>
 
         

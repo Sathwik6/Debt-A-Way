@@ -35,16 +35,17 @@ function MyListings(){
         <>
         <Navbar />
         <div className="myListings-page">
-            <div className="tables">
-                <MyDebtPostings/>
-                <MyTradePostings/>
-            </div>
-            <div className="postdebtbox">
+        <div className="postdebtbox">
                 <NewDebtPosting /> 
             </div>
-                
+            <div className="listing-tables">
+                <MyDebtPostings/>
+                <div className="botton-table">
+                <MyTradePostings/>
+                </div>
+            </div>
         </div>
-        <div className="footer"> </div>
+        <div className="footer"> hi</div>
         </>
 
         
