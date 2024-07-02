@@ -1,6 +1,7 @@
 import { Router } from "express";
 import verifyToken from "../middleware/authMiddleware.js";
 import { debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, addWalletBalance, payDebt, trade,lend } from "../controller/userController.js";
+import { debts, lendings, trade, lend,walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, addWalletBalance, payDebt } from "../controller/userController.js";
 
 const userRoute = Router()
 
