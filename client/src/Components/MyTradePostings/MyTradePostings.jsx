@@ -3,9 +3,19 @@ import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography,  Box, TextField  } from "@mui/material";
 import './MyTradePostings.css'
 import { styled } from "@mui/system";
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
+
 
 function myTradePostings(){
     const [myTradePostings, setmyTradePostings] = useState([]);
+    const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+    const [updatedBorrowerUsername, setUpdatedBorrowerUsername] = useState();
+    const [updatedAmount, setUpdatedAmount] = useState();
+    const [updatedIntrestRate, setUpdatedIntrestRate] = useState();
+    const [updatedTradePrice, setUpdatedTradePrice] = useState();
+
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
@@ -91,6 +101,24 @@ function myTradePostings(){
         }
     }
 
+
+    const handleCloseTradeModal = () => {
+        setIsTradeModalOpen(false);
+        setSelectedDebtForTrade(null);
+        setTradePrice('');
+    };
+
+    const handleUpdateClick = () => {
+        setIsTradeModalOpen(true);
+    }
+
+
+    const handleUpdatedTrade = () => {
+
+    };
+
+    
+
     return (
         <div className="full-width-container">
         <Typography variant="h6" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">My Trade Postings</Typography>
@@ -144,7 +172,7 @@ function myTradePostings(){
                                                 mb: '0.1rem',
                                                 width: '5.2rem',
                                             }}
-                                            /*onClick={(event) => handleUpdateClick(event,debt.id)} */
+                                            onClick={(event) => handleUpdateClick(event,debt.id)} 
                                         >
                                             Update
                                         </Button>
@@ -206,6 +234,42 @@ function myTradePostings(){
                     mt: '0.8rem',
                 }}>You don't have trade postings.</Typography>
             )}
+
+        <Modal
+        isOpen={isTradeModalOpen}
+        onRequestClose={handleCloseTradeModal}
+        className="update-trade-modal"
+        >
+            <div className="trade-modal-content">
+            <h4 className="trade-modal-header">Update My Trade Posting</h4>
+            <input
+                    value={updatedBorrowerUsername}
+                    onChange={(e) => setUpdatedBorrowerUsername(e.target.value)}
+                    placeholder="Borrower Username"
+                />
+            <input
+                    type="number"
+                    value={updatedAmount}
+                    onChange={(e) => setUpdatedAmount(e.target.value)}
+                    placeholder="Amount"
+                />
+            <input
+                    type="number"
+                    value={updatedIntrestRate}
+                    onChange={(e) => setUpdatedIntrestRate(e.target.value)}
+                    placeholder="Intrest Rate"
+                />
+            <input
+                    type="number"
+                    value={updatedTradePrice}
+                    onChange={(e) => setUpdatedTradePrice(e.target.value)}
+                    placeholder="Intrest Rate"
+                />
+
+                 <button  className="trade-modal-button trade-modal-button-primary" onClick={handleUpdatedTrade}>Save</button>
+                <button   className="trade-modal-button trade-modal-button-secondary" onClick={handleCloseTradeModal}>Cancel</button>
+                </div>
+         </Modal>   
 
         </div> 
     );

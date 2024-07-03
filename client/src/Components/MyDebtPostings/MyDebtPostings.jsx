@@ -3,9 +3,18 @@ import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box, TextField } from "@mui/material";
 import { styled } from "@mui/system";
 import './MyDebtPostings.css'
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
+
 
 function myDebtPostings(){
     const [myDebtPostings, setmyDebtPostings] = useState([]);
+    const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+    const [updatedBorrowerUsername, setUpdatedBorrowerUsername] = useState();
+    const [updatedAmount, setUpdatedAmount] = useState();
+    const [updatedIntrestRate, setUpdatedIntrestRate] = useState();
+
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
@@ -68,6 +77,7 @@ function myDebtPostings(){
     }
 
     const handleUpdate = async (event, postId) => {
+        setIsTradeModalOpen(true);
         /*
         Read this:
             send the details as a json respoinse to the api call. 
@@ -122,6 +132,16 @@ function myDebtPostings(){
         } else {
             setInputPage(currentPage);
         }
+    }
+
+    const handleCloseTradeModal = () => {
+        setIsTradeModalOpen(false);
+        setSelectedDebtForTrade(null);
+        setTradePrice('');
+    };
+
+    const handleUpdatedDebt = () =>{
+
     }
 
 
@@ -235,7 +255,38 @@ function myDebtPostings(){
             ) : (
                 <Typography sx={{ mt: '0.8rem' }}>You don't have debt postings.</Typography>
             )}
-            
+        
+        <Modal
+        isOpen={isTradeModalOpen}
+        onRequestClose={handleCloseTradeModal}
+        className="update-trade-modal"
+        // You can add more styling or positioning properties here
+        >
+            <div className="trade-modal-content">
+            <h4 className="trade-modal-header">Update My Debt Posting</h4>
+            <input
+                    value={updatedBorrowerUsername}
+                    onChange={(e) => setUpdatedBorrowerUsername(e.target.value)}
+                    placeholder="Borrower Username"
+                />
+            <input
+                    type="number"
+                    value={updatedAmount}
+                    onChange={(e) => setUpdatedAmount(e.target.value)}
+                    placeholder="Amount"
+                />
+            <input
+                    type="number"
+                    value={updatedIntrestRate}
+                    onChange={(e) => setUpdatedIntrestRate(e.target.value)}
+                    placeholder="Intrest Rate"
+                />
+
+                 <button  className="trade-modal-button trade-modal-button-primary" onClick={handleUpdatedDebt}>Save</button>
+                <button   className="trade-modal-button trade-modal-button-secondary" onClick={handleCloseTradeModal}>Cancel</button>
+                </div>
+         </Modal>   
+
         </div>
     );
 }
