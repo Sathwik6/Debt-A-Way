@@ -58,6 +58,7 @@ function NewDebtPosting(){
             if (response.status === 200){
                 toast.success("Debt Posted Successfully")
             }
+            location.reload()
         } catch (error) {
             toast.error("Debt Posting Failed")
             console.error("Debt Posting Failed:", error);

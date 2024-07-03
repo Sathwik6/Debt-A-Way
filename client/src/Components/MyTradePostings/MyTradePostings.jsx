@@ -75,6 +75,21 @@ function myTradePostings(){
         }
     }
 
+    const handleDeleteClick= async (event,postId)=>{
+        event.preventDefault();
+
+        try{
+            console.log(postId);
+            const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/delete-TradePosting`,{postId});
+            console.log(response)
+            if(response.status==200){
+                console.log("Trade deletion successful")
+                location.reload()
+            }
+        }catch(error){
+            console.log("Trade deletion failed")
+        }
+    }
 
     return (
         <div className="full-width-container">
@@ -98,7 +113,7 @@ function myTradePostings(){
                                     <StyledTableCell>{debt.borrowerUsername}</StyledTableCell>
                                     <StyledTableCell>{debt.amount}</StyledTableCell>
                                     <StyledTableCell>{debt.interestRate}%</StyledTableCell>
-                                    <StyledTableCell>{debt.tradePrice}%</StyledTableCell>
+                                    <StyledTableCell>{debt.tradePrice}</StyledTableCell>
                                     <StyledTableCell>
                                     <Button
                                             variant="contained"
@@ -129,7 +144,7 @@ function myTradePostings(){
                                                 mb: '0.1rem',
                                                 width: '5.2rem',
                                             }}
-                                           /*onClick={(event) => handleLendClick(event,debt.id)}*/
+                                           onClick={(event) => handleDeleteClick(event,debt.id)}
                                         >
                                             Delete
                                         </Button>

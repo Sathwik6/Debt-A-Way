@@ -74,6 +74,24 @@ function TradableDebts(){
         }
     }
 
+    const handleBuyClick=async (event,postid)=>{
+        event.preventDefault()
+
+        try{
+
+            const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/buy`,{postid})
+            console.log(response)
+
+            if(response.status==200){
+                location.reload()
+                console.log("You successfully bought a debt. You are the new lender")
+            }
+
+        }catch(error){
+            console.error("Error buying debt: ",error)
+        }
+    }
+
     return (
         <div className="full-width-container">
             <Typography variant="h6" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Trade Postings</Typography>
@@ -96,7 +114,7 @@ function TradableDebts(){
                                     <StyledTableCell>{debt.borrowerUsername}</StyledTableCell>
                                     <StyledTableCell>{debt.amount}</StyledTableCell>
                                     <StyledTableCell>{debt.interestRate}%</StyledTableCell>
-                                    <StyledTableCell>{debt.tradePrice}% </StyledTableCell>
+                                    <StyledTableCell>{debt.tradePrice}</StyledTableCell>
                                     <StyledTableCell>
                                     <Button
                                             variant="contained"
@@ -110,7 +128,7 @@ function TradableDebts(){
                                                 mb: '0.1rem',
                                                 width: '5.2rem',
                                             }}
-                                            /*onClick={(event) => handleLendClick(event,debt.id)}*/
+                                            onClick={(event) => handleBuyClick(event,debt.id)}
                                         >
                                             Buy
                                         </Button>

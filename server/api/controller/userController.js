@@ -379,4 +379,117 @@ const trade = async (req, res) => {
     
 }
 
-export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, addWalletBalance, payDebt, lend, trade};
+const buy = async (req, res) => {
+    const { postid} = req.body
+    try{
+        //Check posting
+        const posting = await prisma.debtPosting.findFirst({
+            where: { id: postid }
+        });
+
+        if (!posting) {
+            return res.status(400).json({ message: 'No posting found. Invalid Request' });
+        }
+
+        // if(posting.isTradable==true){
+        //     return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
+        // }
+
+        //Fetch the posting
+        //Fetch the user
+        const user=await prisma.user.findFirst({
+            where:{username:req.username}
+        });
+
+        if(!user){
+            return res.status(400).json({message: 'No user found.'});
+        }
+
+        const userBalance = parseFloat(user.walletBalance, 2);
+        const tp = parseFloat(posting.tradePrice, 2);
+        const amount=parseFloat(posting.amount,2);
+
+        //Ensure users wallet balance is greater than trade price
+        if(userBalance<tp){
+            return res.status(400).json({message: 'Insuffiecient wallet balance'});
+        }
+
+        //If yes proceed with transaction
+        const [buyer, seller, debtPosting] = await prisma.$transaction([
+            // //Marks the debtPosting as fulfilled and assigns the lender
+            // prisma.debtPosting.update({
+            //     where: { id: postid },
+            //     data: {
+            //         isFulfilled: true,
+            //         lenderUsername: req.username
+            //     },
+            // }),
+            //Deposists/adds the money to seller 
+            prisma.user.update({
+                where: { username: posting.lenderUsername},
+                data: {
+                    walletBalance: {
+                        increment: tp,
+                    },
+                    activeLendTotal: {
+                        decrement: amount,
+                    },
+                },
+            }),
+            //Withdraws/takes-out money from buyer
+            prisma.user.update({
+                where: { username: req.username },
+                data: {
+                    walletBalance: {
+                        decrement: tp,
+                    },
+                    activeLendTotal: {
+                        increment:amount,
+                    },
+                },
+            }),
+
+            prisma.debtPosting.update({
+                where:{id:postid},
+                data:{
+                    lenderUsername:req.username,
+                    isTradable:false
+                }
+            })
+        ]);
+        // Performs transactional updates
+        //Deduct the user wallet by tradePrice
+        //fetch seller
+        //Increase sellers wallet by that much
+        //Update the lender name
+       
+        res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting});
+    }catch(error){
+        console.log(error);
+        res.status(500).json({ message: 'Failed to post a trade', error });
+    }
+
+    
+}
+
+const deleteTradePosting = async (req, res) =>{
+    const { postId } = req.body;
+    //console.log(req.params)
+    //console.log(postId)
+    try {
+        const deletePosting = await prisma.debtPosting.update({
+            where: {
+              id: postId,
+            },
+            data:{
+                isTradable:false
+            }
+        });
+        res.json({message: "debtPosting Deleted Successfully", deleteTradePosting: deletePosting});
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy};

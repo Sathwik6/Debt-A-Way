@@ -83,15 +83,15 @@ function myDebtPostings(){
         */
         event.preventDefault()
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/update-debtPosting`, 
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/update-debtPosting`, 
                 {postId});
             console.log(response);
 
             if (response.status == 200){
-                console.log("Post deletion Successful");
+                console.log("Post update Successful");
             }
         }catch (error){
-            console.error('Error Deleting Debtposting:', error);
+            console.error('Error Updating Debtposting:', error);
         }
     }
 
