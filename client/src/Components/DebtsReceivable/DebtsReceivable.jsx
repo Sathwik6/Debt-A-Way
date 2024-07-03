@@ -1,11 +1,20 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react";
+import { Toaster, toast } from "sonner"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography,  Box, TextField  } from "@mui/material";
 import { styled } from "@mui/system";
+import Modal from 'react-modal';
+import './DebtsReceivable.css';
+
+Modal.setAppElement('#root');
 
 
 function Lendings(){
     const [debtsReceivable, setDebtsReceivable] = useState([]);
+    const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+    const [selectedDebtForTrade, setSelectedDebtForTrade] = useState(null);
+    const [tradePrice, setTradePrice] = useState('');
+
 
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 5;
@@ -15,6 +24,8 @@ function Lendings(){
     const records = debtsReceivable.slice(firstIndex, lastIndex);
     const npage = Math.ceil(debtsReceivable.length / recordsPerPage);
     const numbers = [...Array(npage + 1).keys()].slice(1)
+
+    
 
     const StyledTableCell = styled(TableCell)({
         padding: '4px 8px',
@@ -44,30 +55,29 @@ function Lendings(){
     }, []);
 
 
+    const handleOpenTradeModal = (debtId) => {
+        setSelectedDebtForTrade(debtId);
+        setIsTradeModalOpen(true);
+    };
+
     const handleTradeDebt = async () => {
-        if (!tradePrice) {
-          alert('Please enter a trade price');
-          return;
+        if (!tradePrice || tradePrice < 0) {
+            toast.warning('Please enter a valid trade price');
+            return;
         }
     
         console.log(tradePrice);
         try {
-          const postid=selectedDebtForTrade
-          const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
+          const postid = selectedDebtForTrade
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
                 {postid,tradePrice} 
                 //{ tradePrice } // Replace 'your_token' with actual token
             );
             console.log(response);
           handleCloseTradeModal();
-          // Refresh your debts list here
         } catch (error) {
           console.error('Error trading debt:', error);
         }
-    };
-
-    const handleOpenTradeModal = (debtId) => {
-        setSelectedDebtForTrade(debtId);
-        setIsTradeModalOpen(true);
     };
     
     const handleCloseTradeModal = () => {
@@ -75,6 +85,9 @@ function Lendings(){
         setSelectedDebtForTrade(null);
         setTradePrice('');
     };
+
+
+
 
     function nextPage() {
         if (currentPage < npage) {
@@ -105,6 +118,7 @@ function Lendings(){
 
     return (
         <div className="full-width-container">
+             <Toaster position="top-center" richColors />
         <Typography variant="h6" sx={{ fontWeight: '1000', mb: '1rem' }} className="section-heading">Lendings</Typography>
         {debtsReceivable.length > 0 ? (
           <>
@@ -137,7 +151,7 @@ function Lendings(){
                             mb: '0.1rem',
                             width: '5.2rem',
                           }}
-                          onClick={(event) => handleClick(event, debt.id)}
+                          onClick={() => handleOpenTradeModal(debt._id)}
                         >
                           Trade
                         </Button>
@@ -195,7 +209,25 @@ function Lendings(){
         ) : (
           <Typography sx={{ mt: '0.8rem' }}>No Lendings Available.</Typography>
         )}
-      </div>
+        <Modal
+        isOpen={isTradeModalOpen}
+        onRequestClose={handleCloseTradeModal}
+        className="trade-modal"
+        // You can add more styling or positioning properties here
+        >
+            <div className="trade-modal-content">
+            <h4 className="trade-modal-header">Set Trade Price</h4>
+                <input
+                    type="number"
+                    value={tradePrice}
+                    onChange={(e) => setTradePrice(e.target.value)}
+                    placeholder="Trade Price"
+                />
+                <button  className="trade-modal-button trade-modal-button-primary" onClick={handleTradeDebt}>Confirm Trade</button>
+                <button   className="trade-modal-button trade-modal-button-secondary" onClick={handleCloseTradeModal}>Cancel</button>
+                </div>
+         </Modal>
+</ div>
     );
   }
 
