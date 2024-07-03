@@ -2,6 +2,7 @@ import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box, TextField } from "@mui/material";
 import { styled } from "@mui/system";
+import './MyDebtPostings.css'
 
 function myDebtPostings(){
     const [myDebtPostings, setmyDebtPostings] = useState([]);

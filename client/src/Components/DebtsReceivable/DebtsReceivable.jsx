@@ -78,7 +78,9 @@ function Lendings(){
             );
             console.log(response);
           handleCloseTradeModal();
+          toast.success("Trade Confirmed!")
         } catch (error) {
+          toast.error("Already in posting try updating or deleting it")
           console.error('Error trading debt:', error);
         }
     };

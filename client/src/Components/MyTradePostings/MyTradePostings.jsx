@@ -125,14 +125,14 @@ function myTradePostings(){
                                                 },
                                                 height: '3.8vh',
                                                 mb: '0.1rem',
-                                                width: '5.2rem',
+                                                mr: '3rem', 
                                             }}
-                                            /*onClick={(event) => handleUpdateClick(event,debt.id)} */
+                                           onClick={(event) => handleDeleteClick(event,debt.id)}
                                         >
-                                            Update
-                                        </Button>
+                                            Delete
+                                    </Button>
 
-                                        <Button
+                                    <Button
                                             variant="contained"
                                             sx={{
                                                 backgroundColor: 'rgb(114, 137, 218)',
@@ -144,10 +144,11 @@ function myTradePostings(){
                                                 mb: '0.1rem',
                                                 width: '5.2rem',
                                             }}
-                                           onClick={(event) => handleDeleteClick(event,debt.id)}
+                                            /*onClick={(event) => handleUpdateClick(event,debt.id)} */
                                         >
-                                            Delete
+                                            Update
                                         </Button>
+
                                     </StyledTableCell>
                                 </StyledTableRow>
                             ))}
