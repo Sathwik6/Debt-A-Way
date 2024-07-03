@@ -144,7 +144,7 @@ const tradableDebts = async (req, res) =>{
             where: {
                 isFulfilled: true,
                 isTradable:true,
-                //borrowerUsername: { not: req.username } Commented this out to allow users to buyout their own debt
+                lenderUsername: { not: req.username } //Commented this out to allow users to buyout their own debt
             },
             select: {
                 id: true,

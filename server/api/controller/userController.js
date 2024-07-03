@@ -358,16 +358,21 @@ const trade = async (req, res) => {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
+        if(posting.isTradable==true){
+            return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
+        }
+
         // Performs transactional updates
-        const tradePost = await prisma.debtPosting.update({
-                where: { id: postid },
-                data: {
-                    isTradable: true,
-                    tradePrice
-                },
+        const tradePost= await prisma.debtPosting.update({
+                    where: { id: postid },
+                    data: {
+                        isTradable: true,
+                        tradePrice: tradePrice
+                    },
         });
         res.status(200).json({ message: 'Trade Posted Successfully', trade:tradePost});
     }catch(error){
+        console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
     }
 

@@ -62,7 +62,10 @@ function Wallet(){
             console.log(response);
             
             if (response.status === 200){
-                location.reload()
+                location.reload()//But this is bad practice instead
+                //make an api call for this particular (updated companent)
+
+                //Find us a better way 
                 toast.success("Amount Added to Wallet Successfully")
             }
         } catch (error) {

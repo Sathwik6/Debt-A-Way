@@ -68,7 +68,10 @@ function Lendings(){
     
         console.log(tradePrice);
         try {
+          console.log(selectedDebtForTrade)
           const postid = selectedDebtForTrade
+          console.log(postid)
+
           const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
                 {postid,tradePrice} 
                 //{ tradePrice } // Replace 'your_token' with actual token
@@ -151,7 +154,7 @@ function Lendings(){
                             mb: '0.1rem',
                             width: '5.2rem',
                           }}
-                          onClick={() => handleOpenTradeModal(debt._id)}
+                          onClick={() => handleOpenTradeModal(debt.id)}
                         >
                           Trade
                         </Button>
