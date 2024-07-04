@@ -11,9 +11,14 @@ Modal.setAppElement('#root');
 function myTradePostings(){
     const [myTradePostings, setmyTradePostings] = useState([]);
     const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
-    const [updatedAmount, setUpdatedAmount] = useState();
-    const [updatedIntrestRate, setUpdatedIntrestRate] = useState();
-    const [updatedTradePrice, setUpdatedTradePrice] = useState();
+    const [updatedTradeId, setUpdateTradeId] = useState();
+    const [formData, setFormData] = useState({
+        updatedAmount: "",
+        updatedInterestRate: "",
+        updatedTradePice: "",
+    }
+    );
+
 
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 5;
@@ -104,16 +109,29 @@ function myTradePostings(){
     const handleCloseTradeModal = () => {
         setIsTradeModalOpen(false);
         setSelectedDebtForTrade(null);
-        setTradePrice('');
+        setFormData(() => ({
+            updatedAmount: "",
+            updatedInterestRate: "",
+            updatedTradePice: "",
+          }));
     };
 
-    const handleUpdateClick = () => {
+    const handleUpdate = (postId) => {
         setIsTradeModalOpen(true);
+        setUpdateTradeId(() => postId);
+    }
+
+    function handleChange(event) {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value
+        }));
     }
 
 
     const handleUpdatedTrade = () => {
-
+        // needs to be completed 
     };
 
     
@@ -171,7 +189,7 @@ function myTradePostings(){
                                                 mb: '0.1rem',
                                                 width: '5.2rem',
                                             }}
-                                            onClick={(event) => handleUpdateClick(event,debt.id)} 
+                                            onClick={() => handleUpdate(debt.id)} 
                                         >
                                             Update
                                         </Button>
@@ -239,30 +257,34 @@ function myTradePostings(){
         onRequestClose={handleCloseTradeModal}
         className="update-trade-modal"
         >
+        <form  onSubmit={handleUpdatedTrade}>
             <div className="trade-modal-content">
             <h4 className="trade-modal-header">Update My Trade Posting</h4>
             <input
-                    type="number"
-                    value={updatedAmount}
-                    onChange={(e) => setUpdatedAmount(e.target.value)}
-                    placeholder="Amount"
+                     type="number"
+                     name="updatedAmount"
+                     placeholder="Amount"
+                     value={formData.updatedAmount}
+                     onChange={handleChange}
                 />
             <input
-                    type="number"
-                    value={updatedIntrestRate}
-                    onChange={(e) => setUpdatedIntrestRate(e.target.value)}
-                    placeholder="Intrest Rate"
+                     type="number"
+                     name="updatedInterestRate"
+                     placeholder="Interest Rate"
+                     value={formData.updatedInterestRate}
+                     onChange={handleChange}
                 />
             <input
-                    type="number"
-                    value={updatedTradePrice}
-                    onChange={(e) => setUpdatedTradePrice(e.target.value)}
-                    placeholder="Intrest Rate"
+                     type="number"
+                     name="updatedTradePrice"
+                     placeholder="Trade Price"
+                     value={formData.updatedTradePrice}
+                     onChange={handleChange}
                 />
-
-                 <button  className="trade-modal-button trade-modal-button-primary" onClick={handleUpdatedTrade}>Save</button>
-                <button   className="trade-modal-button trade-modal-button-secondary" onClick={handleCloseTradeModal}>Cancel</button>
+            <button  className="trade-modal-button trade-modal-button-primary" type="submit">Save</button>
+            <button  className="trade-modal-button trade-modal-button-secondary" onClick={handleCloseTradeModal}>Cancel</button>
                 </div>
+            </form>
          </Modal>   
 
         </div> 

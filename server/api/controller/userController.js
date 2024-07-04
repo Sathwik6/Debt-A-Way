@@ -163,6 +163,30 @@ const updateDebtPosting = async (req, res) =>{
     }
 };
 
+const updateTradePosting = async (req, res) => {
+    const { postId, postingInfo } = req.body;
+    try {
+        if (!postId || !postingInfo) {
+            throw new Error("Missing postId or postingInfo");
+        }
+
+        const updatePosting = await prisma.debtPosting.update({
+            where: {
+              id: postId,
+            },
+            // postingInfor is a js object that contains  amount and interestRate
+            data: {amount: parseFloat(postingInfo.updatedAmount),
+                interestRate: parseFloat(postingInfo.updatedInterestRate),
+                tradePrice: parseFloat(postingInfo.updatedTradePice),
+            },
+          })
+        res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 const addWalletBalance = async (req, res) =>{
     const { additionAmount } = req.body;
 
@@ -498,4 +522,4 @@ const deleteTradePosting = async (req, res) =>{
     }
 };
 
-export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy};
+export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, updateTradePosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy};
