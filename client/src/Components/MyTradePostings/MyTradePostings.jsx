@@ -3,19 +3,22 @@ import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography,  Box, TextField  } from "@mui/material";
 import '../MyDebtPostings/updateListings.css'
 import { styled } from "@mui/system";
+import { Toaster, toast } from "sonner"
 import Modal from 'react-modal';
+import { ClipLoader } from "react-spinners"
 
 Modal.setAppElement('#root');
 
 
 function myTradePostings(){
+    const [loading, setLoading] = useState(false);
     const [myTradePostings, setmyTradePostings] = useState([]);
     const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
     const [updatedTradeId, setUpdateTradeId] = useState();
     const [formData, setFormData] = useState({
         updatedAmount: "",
         updatedInterestRate: "",
-        updatedTradePice: "",
+        updatedTradePrice: "",
     }
     );
 
@@ -42,11 +45,6 @@ function myTradePostings(){
             backgroundColor: 'yellow',
         },
     });
-
-    // const [newDebtForm, setNewDebtFrom] = useState({
-    //     amount: 0,
-    //     interestRate: 0.0
-    // });
 
     useEffect(() => {
         const fetchTradePostings = async () =>{
@@ -108,11 +106,10 @@ function myTradePostings(){
 
     const handleCloseTradeModal = () => {
         setIsTradeModalOpen(false);
-        setSelectedDebtForTrade(null);
         setFormData(() => ({
             updatedAmount: "",
             updatedInterestRate: "",
-            updatedTradePice: "",
+            updatedTradePrice: "",
           }));
     };
 
@@ -130,14 +127,64 @@ function myTradePostings(){
     }
 
 
-    const handleUpdatedTrade = () => {
-        // needs to be completed 
+    const handleUpdatedTrade = async (event) => {
+        event.preventDefault();
+        if (!formData.updatedAmount || !formData.updatedInterestRate || !formData.updatedTradePrice){
+            toast.error('Please enter enter all fields');
+            return;
+        }else if (!formData.updatedAmount || formData.updatedAmount < 0){
+            toast.warning('Please enter valid amount');
+            return;
+        } 
+
+        // send request to back end
+        console.log(formData);
+        setLoading(true);
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user//update-tradePosting`, 
+            {postId: updatedTradeId, 
+            postingInfo:{
+                        updatedAmount: parseFloat(formData.updatedAmount),
+                        updatedInterestRate: parseFloat(formData.updatedInterestRate),
+                        updatedTradePrice: parseFloat(formData.updatedTradePrice),
+            }
+            });
+            console.log(response);
+
+            if (response.status == 200){
+                console.log("Post update Successful");
+                toast.success("Trade Post Updated Successfully!");
+                setTimeout(() => {
+                    setIsTradeModalOpen(false);
+                    location.reload();
+                }, 500); 
+            }
+        }catch (error){
+            toast.error("Error Updating Trade posting!")
+            console.error('Error Updating Trade posting:', error);
+        }finally {
+            setLoading(false);
+        }
     };
 
     
 
     return (
         <div className="full-width-container">
+          <Toaster position="top-center" richColors />
+            { 
+            loading ? 
+            <div className="update-loader"> 
+                <ClipLoader 
+                    size={60}
+                    color={"#7289da"}
+                    loading={loading}
+                    />  
+            </div>
+            
+            
+            :
+            <>
         <Typography variant="h6" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">My Trade Postings</Typography>
             {myTradePostings.length > 0 ? (
                 <>
@@ -251,7 +298,7 @@ function myTradePostings(){
                     mt: '0.8rem',
                 }}>You don't have trade postings.</Typography>
             )}
-
+        
         <Modal
         isOpen={isTradeModalOpen}
         onRequestClose={handleCloseTradeModal}
@@ -286,8 +333,10 @@ function myTradePostings(){
                 </div>
             </form>
          </Modal>   
-
+         </>
+        }
         </div> 
+        
     );
 }
 

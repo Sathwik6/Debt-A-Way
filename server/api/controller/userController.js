@@ -177,7 +177,7 @@ const updateTradePosting = async (req, res) => {
             // postingInfor is a js object that contains  amount and interestRate
             data: {amount: parseFloat(postingInfo.updatedAmount),
                 interestRate: parseFloat(postingInfo.updatedInterestRate),
-                tradePrice: parseFloat(postingInfo.updatedTradePice),
+                tradePrice: parseFloat(postingInfo.updatedTradePrice),
             },
           })
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});

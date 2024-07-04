@@ -94,16 +94,14 @@ function myDebtPostings(){
     const handleUpdatedDebt = async (event) =>{
         event.preventDefault();
         // validate user input
-        if (!formData.updatedAmount && !formData.updatedInterestRate){
+        if (!formData.updatedAmount || !formData.updatedInterestRate){
             toast.error('Please enter enter all fields');
             return;
         }else if (!formData.updatedAmount || formData.updatedAmount < 0){
             toast.warning('Please enter valid amount');
             return;
-        } else if (!formData.updatedInterestRate){
-            toast.warning('Intrest Rate Required!');
-            return;
         }
+
         // send request to back end
         console.log(formData);
         setLoading(true);
@@ -119,11 +117,11 @@ function myDebtPostings(){
 
             if (response.status == 200){
                 console.log("Post update Successful");
-                toast.success("Post update Successful");
+                toast.success("Debt Post Updated Successfully!");
                 setTimeout(() => {
                     setIsTradeModalOpen(false);
                     location.reload();
-                }, 700); 
+                }, 500); 
             }
         }catch (error){
             toast.error("Error Updating Debtposting!")
@@ -294,8 +292,8 @@ function myDebtPostings(){
                 >
                     Next
                 </Button>
-            </Box>
-            </>
+                </Box>
+                </>
             ) : (
                 <Typography sx={{ mt: '0.8rem' }}>You don't have debt postings.</Typography>
             )}
