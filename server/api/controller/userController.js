@@ -144,12 +144,18 @@ const deleteDebtPosting = async (req, res) =>{
 const updateDebtPosting = async (req, res) =>{
     const { postId, postingInfo } = req.body;
     try {
+        if (!postId || !postingInfo) {
+            throw new Error("Missing postId or postingInfo");
+        }
+
         const updatePosting = await prisma.debtPosting.update({
             where: {
               id: postId,
             },
             // postingInfor is a js object that contains  amount and interestRate
-            data: postingInfo,
+            data: {amount: parseFloat(postingInfo.updatedAmount),
+                interestRate: parseFloat(postingInfo.updatedInterestRate),
+            },
           })
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {

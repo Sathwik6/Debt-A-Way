@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography,  Box, TextField  } from "@mui/material";
-import './MyTradePostings.css'
+import '../MyDebtPostings/updateListings.css'
 import { styled } from "@mui/system";
 import Modal from 'react-modal';
 
@@ -11,7 +11,6 @@ Modal.setAppElement('#root');
 function myTradePostings(){
     const [myTradePostings, setmyTradePostings] = useState([]);
     const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
-    const [updatedBorrowerUsername, setUpdatedBorrowerUsername] = useState();
     const [updatedAmount, setUpdatedAmount] = useState();
     const [updatedIntrestRate, setUpdatedIntrestRate] = useState();
     const [updatedTradePrice, setUpdatedTradePrice] = useState();
@@ -242,11 +241,6 @@ function myTradePostings(){
         >
             <div className="trade-modal-content">
             <h4 className="trade-modal-header">Update My Trade Posting</h4>
-            <input
-                    value={updatedBorrowerUsername}
-                    onChange={(e) => setUpdatedBorrowerUsername(e.target.value)}
-                    placeholder="Borrower Username"
-                />
             <input
                     type="number"
                     value={updatedAmount}
