@@ -16,8 +16,6 @@ function myTradePostings(){
     const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
     const [updatedTradeId, setUpdateTradeId] = useState();
     const [formData, setFormData] = useState({
-        updatedAmount: "",
-        updatedInterestRate: "",
         updatedTradePrice: "",
     }
     );
@@ -107,8 +105,6 @@ function myTradePostings(){
     const handleCloseTradeModal = () => {
         setIsTradeModalOpen(false);
         setFormData(() => ({
-            updatedAmount: "",
-            updatedInterestRate: "",
             updatedTradePrice: "",
           }));
     };
@@ -129,13 +125,10 @@ function myTradePostings(){
 
     const handleUpdatedTrade = async (event) => {
         event.preventDefault();
-        if (!formData.updatedAmount || !formData.updatedInterestRate || !formData.updatedTradePrice){
-            toast.error('Please enter enter all fields');
+        if (!formData.updatedTradePrice){
+            toast.warning('Please enter valid Trade Price');
             return;
-        }else if (!formData.updatedAmount || formData.updatedAmount < 0){
-            toast.warning('Please enter valid amount');
-            return;
-        } 
+        }
 
         // send request to back end
         console.log(formData);
@@ -144,8 +137,6 @@ function myTradePostings(){
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user//update-tradePosting`, 
             {postId: updatedTradeId, 
             postingInfo:{
-                        updatedAmount: parseFloat(formData.updatedAmount),
-                        updatedInterestRate: parseFloat(formData.updatedInterestRate),
                         updatedTradePrice: parseFloat(formData.updatedTradePrice),
             }
             });
@@ -307,20 +298,6 @@ function myTradePostings(){
         <form  onSubmit={handleUpdatedTrade}>
             <div className="trade-modal-content">
             <h4 className="trade-modal-header">Update My Trade Posting</h4>
-            <input
-                     type="number"
-                     name="updatedAmount"
-                     placeholder="Amount"
-                     value={formData.updatedAmount}
-                     onChange={handleChange}
-                />
-            <input
-                     type="number"
-                     name="updatedInterestRate"
-                     placeholder="Interest Rate"
-                     value={formData.updatedInterestRate}
-                     onChange={handleChange}
-                />
             <input
                      type="number"
                      name="updatedTradePrice"
