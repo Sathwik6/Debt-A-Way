@@ -378,6 +378,7 @@ const lend = async (req, res) => {
 //Backend logic of trade
 const trade = async (req, res) => {
     const { postid,tradePrice } = req.body
+    console.log(postid);
     try{
         //Check posting
         const posting = await prisma.debtPosting.findFirst({

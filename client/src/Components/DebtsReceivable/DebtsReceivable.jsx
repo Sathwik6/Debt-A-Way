@@ -12,8 +12,9 @@ Modal.setAppElement('#root');
 function Lendings(){
     const [debtsReceivable, setDebtsReceivable] = useState([]);
     const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
-    const [selectedDebtForTrade, setSelectedDebtForTrade] = useState(null);
-    const [tradePrice, setTradePrice] = useState('');
+    //const [selectedDebtForTrade, setSelectedDebtForTrade] = useState(null);
+    const [tradePrice, setTradePrice] = useState(0);
+    const [postid, setPostid] = useState(null);
 
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -56,7 +57,8 @@ function Lendings(){
 
 
     const handleOpenTradeModal = (debtId) => {
-        setSelectedDebtForTrade(debtId);
+        setPostid(debtId);
+        // setSelectedDebtForTrade(debtId);
         setIsTradeModalOpen(true);
     };
 
@@ -65,7 +67,7 @@ function Lendings(){
             toast.warning('Please enter a valid trade price');
             return;
         }
-    
+        console.log(postid)
         console.log(tradePrice);
         try {
           console.log(selectedDebtForTrade)
@@ -87,7 +89,8 @@ function Lendings(){
     
     const handleCloseTradeModal = () => {
         setIsTradeModalOpen(false);
-        setSelectedDebtForTrade(null);
+        setPostid(null)
+        // setSelectedDebtForTrade(null);
         setTradePrice('');
     };
 
