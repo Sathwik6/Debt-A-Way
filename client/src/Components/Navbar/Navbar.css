@@ -147,7 +147,7 @@ body {
 }
 
 #navbarSupportedContent ul li.active a {
-  color: #5161ce;
+  color: #fff;
   background-color: transparent;
   transition: all 0.7s; 
 }
@@ -159,5 +159,47 @@ body {
 a.navbar-logo {
   text-decoration: none;
 }
+
+.dropdown-section{
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.dropdownbox{
+  z-index: 1000;
+  background-color: #5161ce;
+  width: 14%;
+  height: 10rem;
+  margin-right: 0.1%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin-top: -0.3rem;
+}
+.dropdownbox li{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 3.33rem;
+}
+.dropdownbox li:hover{
+  background-color: #fff;
+  color:#5161ce;
+  font-weight:bold;
+}
+.drop-nav-link{
+  color: white;
+  text-decoration: none;
+  align-content: center;
+  font-size: medium;
+  width: 100%;
+  text-align: center;
+}
+.drop-nav-link:hover{
+  color: #5161ce;
+}
+
 
 

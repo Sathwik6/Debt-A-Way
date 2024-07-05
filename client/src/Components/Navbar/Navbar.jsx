@@ -1,13 +1,20 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import $ from "jquery";
 import "./Navbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faShoppingBag, faChartBar, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faShoppingBag, faChartBar, faHome, faUser, faBook, faAddressCard} from '@fortawesome/free-solid-svg-icons';
+import { faFaceGrinTears } from "@fortawesome/free-regular-svg-icons";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+      setDropdownOpen(!dropdownOpen);
+    };
+
 
   const handleLogout = async () => {
     try {
@@ -79,12 +86,35 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link btn" onClick={handleLogout}>
-              <FontAwesomeIcon icon={faSignOutAlt} /> Log-Out
+            <a className="nav-link btn" onClick={toggleDropdown}>
+              <FontAwesomeIcon icon={faUser} /> User
             </a>
           </li>
         </ul>
       </div>
+      {(!dropdownOpen)? <></>: (
+        <div className="dropdown-section">
+          <ul className="dropdownbox">
+          <li>
+            <NavLink to="/home" className="drop-nav-link">
+              <FontAwesomeIcon icon={faBook} />{" "}
+              <span className="nav-item-name ">Transactions</span>
+            </NavLink>
+          </li>
+          <li>
+          <NavLink to="/home" className="drop-nav-link">
+          <FontAwesomeIcon icon={faAddressCard} />{" "}
+              <span className="nav-item-name">User Details</span>
+            </NavLink>
+          </li>
+          <li>
+          <a to="/home" className="drop-nav-link" onClick={handleLogout}>
+              <FontAwesomeIcon icon={faSignOutAlt} /> {" "}Log-Out
+            </a>
+          </li>
+        </ul>
+      </div>
+      )}
     </nav>
   );
 };

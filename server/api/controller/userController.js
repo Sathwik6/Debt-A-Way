@@ -62,6 +62,7 @@ const debts = async (req, res) =>{
     }
 };
 
+
 const lendings = async (req, res) =>{
     try {
         const incomingDebtsToUser = await prisma.debtPosting.findMany({
@@ -520,5 +521,6 @@ const deleteTradePosting = async (req, res) =>{
         res.status(500).json({ message: error.message });
     }
 };
+
 
 export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, updateTradePosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy};

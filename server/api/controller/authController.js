@@ -95,4 +95,8 @@ const logoutUser = (req, res, next) => {
     }
 };
 
-export { registerUser, loginUser, logoutUser };
+
+
+
+
+export { registerUser, loginUser, logoutUser};
