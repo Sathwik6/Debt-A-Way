@@ -2,6 +2,11 @@ import { PrismaClient, Prisma} from '@prisma/client'
 
 const prisma = new PrismaClient();
 
+//gets username (Can query to get all the details.)
+const getUser = async (req, res) => {
+    res.json({username: req.username});
+}
+
 const walletBalance = async (req, res) =>{
     try {
         const userWalletBalance = await prisma.user.findFirst({
@@ -69,7 +74,8 @@ const lendings = async (req, res) =>{
             where: {
                 lenderUsername: req.username,
                 isFulfilled: true,
-                isPaid: false
+                isPaid: false,
+                isTradable: false,
             },
             select: {
                 id: true,
@@ -521,7 +527,32 @@ const deleteTradePosting = async (req, res) =>{
         console.log(error)
         res.status(500).json({ message: error.message });
     }
-};
+}
 
+const transactionLogs = async (req, res) => {
+    try{
+        const userTransactionLogs = await prisma.transationLogs.findMany({
+            where: {
+                or: [
+                    {receiver: req.username},
+                    {sender: req.username}
+                ]
+            },
+            include: {
+                id,
+                date,
+                amount,
+                sender,
+                receiver
+            }
+        });
 
-export {debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, updateTradePosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy};
+        console.log(userTransactionLogs);
+        res.json({message: "Transaction Logs Fetched Successfully", transactionLogs: userTransactionLogs});
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export {getUser, debts, lendings, walletBalance, activeDebtsTotal, activeLendTotal, debtsHistory, lendingsHistory, deleteDebtPosting, updateDebtPosting, updateTradePosting, addWalletBalance, payDebt, lend, trade, deleteTradePosting,buy, transactionLogs};

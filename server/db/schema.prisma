@@ -37,6 +37,16 @@ model DebtPosting {
   @@index([lenderUsername])
 }
 
+model TransactionLogs {
+  id            Int       @id @default(autoincrement())
+  date          DateTime  @default(now())
+  amount        Decimal
+  receiver      String
+  sender        String?
+
+  @@index([receiver])
+  @@index([sender])
+}
 
 
 

@@ -70,13 +70,10 @@ function Lendings(){
         console.log(postid)
         console.log(tradePrice);
         try {
-          console.log(selectedDebtForTrade)
-          const postid = selectedDebtForTrade
           console.log(postid)
 
           const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
-                {postid,tradePrice} 
-                //{ tradePrice } // Replace 'your_token' with actual token
+                {postid,tradePrice},
             );
             console.log(response);
           handleCloseTradeModal();
@@ -91,7 +88,7 @@ function Lendings(){
         setIsTradeModalOpen(false);
         setPostid(null)
         // setSelectedDebtForTrade(null);
-        setTradePrice('');
+        setTradePrice(0);
     };
 
 

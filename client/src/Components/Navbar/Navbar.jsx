@@ -10,6 +10,7 @@ import { faFaceGrinTears } from "@fortawesome/free-regular-svg-icons";
 const Navbar = () => {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [username, setUsername] = useState('User');
 
   const toggleDropdown = () => {
       setDropdownOpen(!dropdownOpen);
@@ -59,6 +60,19 @@ const Navbar = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/get-user`);
+            setUsername(response.data.username);
+        } catch (error) {
+            console.log("Username fetching failed", error);
+        }
+    };
+
+    fetchUser();
+  }, []);
+
 
 
   return (
@@ -87,7 +101,7 @@ const Navbar = () => {
           </li>
           <li className="nav-item">
             <a className="nav-link btn" onClick={toggleDropdown}>
-              <FontAwesomeIcon icon={faUser} /> User
+              <FontAwesomeIcon icon={faUser} /> {username}
             </a>
           </li>
         </ul>
