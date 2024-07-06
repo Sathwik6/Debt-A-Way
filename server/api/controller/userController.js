@@ -199,29 +199,25 @@ const addWalletBalance = async (req, res) =>{
     // validate amount 
     if (isNaN(additionAmount) || additionAmount < 0) {
         return res.status(400).send('Invalid amount');
-      }
+    }
     
     try{
-        // find previous wallet balance
-        const user = await prisma.user.findFirst({
-            where: { username: req.username },
-            select: { walletBalance: true }
-        });
+        const [walletBalance, transactionLog] = await prisma.$transaction([
+            //increase the balance
+            prisma.user.update({
+                where: { username: req.username },
+                data: { walletBalance: { increment: additionAmount} }
+            }),
 
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        // Calculate the new wallet balance
-        const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
-
-        // Update the user's wallet balance
-        const updatedUser = await prisma.user.update({
-            where: { username: req.username },
-            data: { walletBalance: newWalletBalance }
-        });
-
-        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance });
+            //create a transaction log
+            prisma.transactionLogs.create({
+                data: {
+                    amount: additionAmount,
+                    receiver: req.username,
+                }
+            }),
+        ]);
+        res.json({ message: "Added to Wallet Successfully", walletBalance: walletBalance });
     } catch (error) {
         res.status(500).json({ message : error.message})
     }
@@ -237,7 +233,6 @@ const payDebt = async (req, res) =>{
             include: {
                 borrower: true,
                 lender: true,
-                //amount:true, //This was not being fetched
             }
         });
         console.log(debt)
@@ -428,10 +423,6 @@ const buy = async (req, res) => {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        // if(posting.isTradable==true){
-        //     return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
-        // }
-
         //Fetch the posting
         //Fetch the user
         const user=await prisma.user.findFirst({
@@ -502,7 +493,6 @@ const buy = async (req, res) => {
        
         res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting});
     }catch(error){
-        console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
     }
 
@@ -511,46 +501,33 @@ const buy = async (req, res) => {
 
 const deleteTradePosting = async (req, res) =>{
     const { postId } = req.body;
-    //console.log(req.params)
-    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.update({
             where: {
               id: postId,
             },
             data:{
-                isTradable:false
+                isTradable: false
             }
         });
         res.json({message: "debtPosting Deleted Successfully", deleteTradePosting: deletePosting});
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: error.message });
     }
 }
 
 const transactionLogs = async (req, res) => {
     try{
-        const userTransactionLogs = await prisma.transationLogs.findMany({
+        const userTransactionLogs = await prisma.transactionLogs.findMany({
             where: {
-                or: [
+                OR: [
                     {receiver: req.username},
                     {sender: req.username}
                 ]
-            },
-            include: {
-                id,
-                date,
-                amount,
-                sender,
-                receiver
             }
         });
-
-        console.log(userTransactionLogs);
         res.json({message: "Transaction Logs Fetched Successfully", transactionLogs: userTransactionLogs});
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: error.message });
     }
 }
