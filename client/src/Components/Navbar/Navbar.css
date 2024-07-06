@@ -177,7 +177,9 @@ a.navbar-logo {
   flex-direction: column;
   list-style-type: none;
   margin-top: -0.3rem;
+  border-radius: 3px;
 }
+
 .dropdownbox li{
   display: flex;
   justify-content: center;

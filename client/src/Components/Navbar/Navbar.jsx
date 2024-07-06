@@ -110,13 +110,13 @@ const Navbar = () => {
         <div className="dropdown-section">
           <ul className="dropdownbox">
           <li>
-            <NavLink to="/home" className="drop-nav-link">
+            <NavLink to="/transaction-logs" className="drop-nav-link">
               <FontAwesomeIcon icon={faBook} />{" "}
               <span className="nav-item-name ">Transactions</span>
             </NavLink>
           </li>
           <li>
-          <NavLink to="/home" className="drop-nav-link">
+          <NavLink to="/user-details" className="drop-nav-link">
           <FontAwesomeIcon icon={faAddressCard} />{" "}
               <span className="nav-item-name">User Details</span>
             </NavLink>
