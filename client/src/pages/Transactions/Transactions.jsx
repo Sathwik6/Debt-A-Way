@@ -75,6 +75,7 @@ const Transactions = () => {
 
 
     return (
+        <div className='transactions-page'>
         <div className="full-width-container">
             <Typography variant="h6" sx={{fontWeight: '1000', mb: '1rem',}} className="section-heading">Transaction Logs</Typography>
             {transactionLogs.length > 0 ? (
@@ -83,23 +84,26 @@ const Transactions = () => {
                     <Table>
                         <TableHead>
                             <TableRow >
-                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}} >ID</TableCell>
                                 <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Date</TableCell>
                                 <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Amount</TableCell>
-                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Reciever</TableCell>
+                                <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Receiver</TableCell>
                                 <TableCell sx={{fontWeight: 'bolder', alignItems: 'center', fontSize: '1rem'}}>Sender</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {transactionLogs.map((transactionLogs) => (
-                                <StyledTableRow key={transactionLogs.id}>
-                                    <StyledTableCell>{transactionLogs.id}</StyledTableCell>
-                                    <StyledTableCell>{transactionLogs.date}</StyledTableCell>
-                                    <StyledTableCell>{transactionLogs.amount}</StyledTableCell>
-                                    <StyledTableCell>{transactionLogs.receiver}</StyledTableCell>
-                                    <StyledTableCell>{transactionLogs.sender}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
+                            {transactionLogs.map((transactionLog) => {
+                                const date = new Date(transactionLog.date);
+                                const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+                                
+                                return (
+                                    <StyledTableRow key={transactionLog.id}>
+                                        <StyledTableCell>{formattedDate}</StyledTableCell>
+                                        <StyledTableCell>{transactionLog.amount}</StyledTableCell>
+                                        <StyledTableCell>{transactionLog.receiver}</StyledTableCell>
+                                        <StyledTableCell>{transactionLog.sender}</StyledTableCell>
+                                    </StyledTableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -156,6 +160,7 @@ const Transactions = () => {
                     mt: '0.8rem',
                 }}>No Transaction Logs available.</Typography>
             )}
+        </div>
         </div>
 )};
 
