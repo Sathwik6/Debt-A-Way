@@ -42,7 +42,8 @@ const walletBalance = async (req, res) =>{
     }
 };
 
-const activeDebtsTotal = async (req, res) =>{
+
+const activeDebtsTotal= async (req, res) =>{
     try {
         const userActiveDebtsTotal = await prisma.user.findFirst({
             where: { username: req.username },
@@ -155,10 +156,12 @@ const lendingsHistory = async (req, res) =>{
 
 const deleteDebtPosting = async (req, res) =>{
     const { postId } = req.query;
+    //console.log(req.params)
+    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.delete({
             where: {
-                id: postId,
+              id: postId,
             },
         });
         res.json({message: "debtPosting Deleted Successfully", deleteDebtPosting: deletePosting});
@@ -175,10 +178,11 @@ const updateDebtPosting = async (req, res) =>{
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: { id: postId },
+            where: {
+              id: postId,
+            },
             // postingInfor is a js object that contains  amount and interestRate
-            data: {
-                amount: parseFloat(postingInfo.updatedAmount),
+            data: {amount: parseFloat(postingInfo.updatedAmount),
                 interestRate: parseFloat(postingInfo.updatedInterestRate),
             },
           })
@@ -196,9 +200,13 @@ const updateTradePosting = async (req, res) => {
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: { id: postId },
+            where: {
+              id: postId,
+            },
             // postingInfor is a js object that contains  amount and interestRate
-            data: { tradePrice: parseFloat(postingInfo.updatedTradePrice) },
+            data: {
+                tradePrice: parseFloat(postingInfo.updatedTradePrice),
+            },
           })
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {
@@ -206,97 +214,130 @@ const updateTradePosting = async (req, res) => {
     }
 };
 
+
 const addWalletBalance = async (req, res) =>{
     const { additionAmount } = req.body;
 
     // validate amount 
     if (isNaN(additionAmount) || additionAmount < 0) {
         return res.status(400).send('Invalid amount');
-    }
+      }
     
     try{
-        const [ walletBalance ] = await prisma.$transaction([
-            //increase the balance
+        // find previous wallet balance
+        const user = await prisma.user.findFirst({
+            where: { username: req.username },
+            select: { walletBalance: true }
+        });
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        // Calculate the new wallet balance
+        const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
+
+        const [updatedUser,transaction] = await prisma.$transaction([
+            // Update the user's wallet balance
             prisma.user.update({
                 where: { username: req.username },
-                data: { walletBalance: { increment: additionAmount} }
+                data: { walletBalance: newWalletBalance }
             }),
 
-            //create a transaction log
+            //Add to transaction log
             prisma.transactionLogs.create({
-                data: {
-                    amount: additionAmount,
-                    receiver: req.username,
+                data:{
+                    amount:parseFloat(additionAmount),
+                    receiver:req.username
                 }
-            }),
+            })
+
+
         ]);
-        res.json({ message: "Added to Wallet Successfully", walletBalance: walletBalance });
+
+        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance,transaction:transaction });
     } catch (error) {
         res.status(500).json({ message : error.message})
     }
 };
 
 const payDebt = async (req, res) =>{
+    //console.log(req.body)
     const { postid } = req.body;
+    //console.log(postid)
     try{
-        //We just need borrowers username and wallet balance, lenders usernmae
         const debt = await prisma.debtPosting.findFirst({
-            where: { id: postid },
-            select: {
-                amount: true,
-                borrower: {
-                    select: {
-                        username: true,
-                        walletBalance: true,
-                    }
-                },
-                lenderUsername: true,
+            where: { id: postid},
+            include: {
+                borrower: true,
+                lender: true,
+                //amount:true, //This was not being fetched
             }
         });
-
+        console.log(debt)
         if (!debt) {
             return res.status(404).json({message: "debt not found!"});
         }
 
-        if (debt.borrower.walletBalance < debt.amount){
-            return res.status(400).json({message: "Insufficient Funds!"});
+        const {borrower, lender, amount} = debt;
+
+        //Convert to float to compare
+        const borrowerBalance = parseFloat(borrower.walletBalance, 2);
+        const amt = parseFloat(amount, 2);
+
+        //Not doing the above conversion will lead to 500 error
+        // check if the borrower has enough in his wallet
+        if (borrowerBalance < amt){
+            return res.status(400).json({message: "insufficient funds! Please add to wallet and try again"})
         }
 
-        //Pay Transaction
-        await prisma.$transaction([
-            //Withdraw Money from Borrower
-            prisma.user.update({
-                where: { username: debt.borrower.username },
-                data: { walletBalance: { decrement: debt.amount },
-                        activeDebtsTotal: { decrement: debt.amount }
-                }
-            }),
+        // transaction
+        await prisma.$transaction(async (prisma) => {
 
-            //Add Money to Lender
-            prisma.user.update({
-                where: { username: debt.lenderUsername },
-                data: { 
-                    walletBalance: { increment: debt.amount },
-                    activeLendTotal: { decrement: debt.amount } 
-                }
-            }),
+            // Minus amount from borrower's wallet
+            await prisma.user.update({
+                where: { username: borrower.username },
+                data: { walletBalance: { decrement: amt } }
+            });
 
-            //Mark the debtposting as paid
-            prisma.debtPosting.update({
+            // Add amount to lender's wallet
+            await prisma.user.update({
+                where: { username: lender.username },
+                data: { walletBalance: { increment: amt } }
+            });
+
+            // Mark the debt as paid
+            await prisma.debtPosting.update({
                 where: { id: postid },
                 data: { isPaid: true }
-            }),
+            });
 
-            //Create a Transaction Log
-            prisma.transactionLogs.create({
-                data: {
-                    amount: debt.amount,
-                    receiver: debt.lenderUsername,
-                    sender: debt.borrower.username
+            //Reduce borrowers debt owed
+            await prisma.user.update({
+                where: { username: borrower.username },
+                data: { activeDebtsTotal: { decrement: amt } }
+            });
+
+            //Reduce lenders debts recievable
+            await prisma.user.update({
+                where: { username: lender.username },
+                data: { activeLendTotal: { decrement: amt } }
+            });
+
+            //Add to transaction log
+            await prisma.transactionLogs.create({
+                data:{
+                    amount:amt,
+                    sender:borrower.username,
+                    receiver:lender.username
                 }
-            }),
-        ]);
+            });
+        
+
+        });
+
         res.json({ message: "Payment successful!" });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -306,78 +347,15 @@ const payDebt = async (req, res) =>{
 const lend = async (req, res) => {
     const { postid } = req.body
     try{
-        //Check posting
-        const posting = await prisma.debtPosting.findFirst({
-            where: { id: postid },
-            select: { 
-                amount: true,
-                borrowerUsername: true }
-        });
-
-        if (!posting) {
-            return res.status(400).json({ message: 'No posting found. Invalid Request' });
-        }
-
-        //No need to check if the user exists as we are verifying the user.
+        //Check user
         const user = await prisma.user.findFirst({
-            where: { username: req.username },
-            select:{ walletBalance: true }
+            where: { username: req.username }
         });
-
-        //Check walletBalance (Insufficient balance)
-        if(user.walletBalance < posting.amount){
-            return res.status(400).json({message: 'Insufficient wallet balance'});
+        if (!user) {
+            return res.status(400).json({ message: 'No user found. Invalid Request' });
         }
-        console.log(user);
-        console.log(posting);
 
-        // Performs transactional updates
-        await prisma.$transaction([
-            //Marks the debtPosting as fulfilled and assigns the lender
-            prisma.debtPosting.update({
-                where: { id: postid },
-                data: {
-                    isFulfilled: true,
-                    lenderUsername: req.username
-                },
-            }),
-
-            //Add the money to borrower 
-            prisma.user.update({
-                where: { username: posting.borrowerUsername },
-                data: {
-                    walletBalance: { increment: posting.amount },
-                    activeDebtsTotal: { increment: posting.amount },
-                },
-            }),
-
-            //Withdraw money from lender
-            prisma.user.update({
-                where: { username: req.username },
-                data: {
-                    walletBalance: { decrement: posting.amount },
-                    activeLendTotal: { increment: posting.amount },
-                },
-            }),
-
-            prisma.transactionLogs.create({
-                data: {
-                    amount: posting.amount,
-                    receiver: posting.borrowerUsername,
-                    sender: req.username
-                }
-            })
-        ]);
-        res.status(200).json({ message: 'Lent Successfully'});
-    }catch(error){
-        res.status(500).json({ message: 'Failed to lend', error });
-    }  
-}
-
-//Backend logic of trade
-const trade = async (req, res) => {
-    const { postid, tradePrice } = req.body
-    try{
+        //Check posting
         const posting = await prisma.debtPosting.findFirst({
             where: { id: postid }
         });
@@ -386,19 +364,102 @@ const trade = async (req, res) => {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        if(posting.isTradable){
+        const userBalance = parseFloat(user.walletBalance, 2);
+        const amount = parseFloat(posting.amount, 2);
+
+        //For some reason this is not working
+        // const userBalance = parseInt(user.walletBalance);
+        // const amount = parseInt(posting.amount);
+
+
+        //Check walletBalance (Insufficient balance)
+        if(userBalance < amount){
+            console.log(userBalance)
+            console.log(amount)
+            console.log(user)
+            return res.status(400).json({message: 'Insufficient wallet balance'});
+        }
+
+        // Performs transactional updates
+        const [lenPost, borrower, lender,transaction] = await prisma.$transaction([
+            //Marks the debtPosting as fulfilled and assigns the lender
+            prisma.debtPosting.update({
+                where: { id: postid },
+                data: {
+                    isFulfilled: true,
+                    lenderUsername: req.username
+                },
+            }),
+            //Deposists/adds the money to borrower 
+            prisma.user.update({
+                where: { username: posting.borrowerUsername },
+                data: {
+                    walletBalance: {
+                        increment: amount,
+                    },
+                    activeDebtsTotal: {
+                        increment: amount,
+                    },
+                },
+            }),
+            //Withdraws/takes-out money from lender
+            prisma.user.update({
+                where: { username: req.username },
+                data: {
+                    walletBalance: {
+                        decrement: amount,
+                    },
+                    activeLendTotal: {
+                        increment:amount,
+                    },
+                },
+            }),
+
+            //Add to transaction log
+            prisma.transactionLogs.create({
+                data:{
+                    amount:amount,
+                    sender:req.username,
+                    receiver:posting.borrowerUsername
+                }
+            })
+        ]);
+
+        res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower,transaction });
+    }catch(error){
+        res.status(500).json({ message: 'Failed to lend', error });
+    }
+
+    
+}
+
+//Backend logic of trade
+const trade = async (req, res) => {
+    const { postid,tradePrice } = req.body
+    console.log(postid);
+    try{
+        //Check posting
+        const posting = await prisma.debtPosting.findFirst({
+            where: { id: postid }
+        });
+
+        if (!posting) {
+            return res.status(400).json({ message: 'No posting found. Invalid Request' });
+        }
+
+        if(posting.isTradable==true){
             return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
         }
 
         // Performs transactional updates
-        const tradePost = await prisma.debtPosting.update({
+        const tradePost= await prisma.debtPosting.update({
                     where: { id: postid },
                     data: {
                         isTradable: true,
-                        tradePrice: parseFloat(tradePrice, 2)
+                        tradePrice: tradePrice
                     },
         });
-        res.status(200).json({ message: 'Trade Posted Successfully', trade: tradePost});
+        res.status(200).json({ message: 'Trade Posted Successfully', trade:tradePost});
     }catch(error){
         console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
@@ -408,47 +469,72 @@ const trade = async (req, res) => {
 }
 
 const buy = async (req, res) => {
-    const { postid } = req.body
+    const { postid} = req.body
     try{
         //Check posting
         const posting = await prisma.debtPosting.findFirst({
-            where: { id: postid },
-            select: { 
-                amount: true,
-                tradePrice: true, 
-                lenderUsername: true
-            }
+            where: { id: postid }
         });
 
         if (!posting) {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        const user = await prisma.user.findFirst({
-            where: { username: req.username },
-            select: { walletBalance: true }
+        // if(posting.isTradable==true){
+        //     return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
+        // }
+
+        //Fetch the posting
+        //Fetch the user
+        const user=await prisma.user.findFirst({
+            where:{username:req.username}
         });
 
-        if(user.walletBalance < posting.tradePrice){
+        if(!user){
+            return res.status(400).json({message: 'No user found.'});
+        }
+
+        const userBalance = parseFloat(user.walletBalance, 2);
+        const tp = parseFloat(posting.tradePrice, 2);
+        const amount=parseFloat(posting.amount,2);
+
+        //Ensure users wallet balance is greater than trade price
+        if(userBalance<tp){
             return res.status(400).json({message: 'Insuffiecient wallet balance'});
         }
 
-        await prisma.$transaction([
+        //If yes proceed with transaction
+        const [buyer, seller, debtPosting,transaction] = await prisma.$transaction([
+            // //Marks the debtPosting as fulfilled and assigns the lender
+            // prisma.debtPosting.update({
+            //     where: { id: postid },
+            //     data: {
+            //         isFulfilled: true,
+            //         lenderUsername: req.username
+            //     },
+            // }),
             //Deposists/adds the money to seller 
             prisma.user.update({
                 where: { username: posting.lenderUsername},
                 data: {
-                    walletBalance: { increment: posting.tradePrice },
-                    activeLendTotal: {decrement: posting.amount },
+                    walletBalance: {
+                        increment: tp,
+                    },
+                    activeLendTotal: {
+                        decrement: amount,
+                    },
                 },
             }),
-
-            //Withdraw Money from Buyer
+            //Withdraws/takes-out money from buyer
             prisma.user.update({
                 where: { username: req.username },
                 data: {
-                    walletBalance: { decrement: posting.tradePrice },
-                    activeLendTotal: { increment: posting.amount },
+                    walletBalance: {
+                        decrement: tp,
+                    },
+                    activeLendTotal: {
+                        increment:amount,
+                    },
                 },
             }),
 
@@ -463,24 +549,23 @@ const buy = async (req, res) => {
             }),
 
             prisma.debtPosting.update({
-                where:{ id: postid },
-                data:{ 
-                    isTradable: false,
-                    lenderUsername: req.username
-                }
-            }),
-
-            prisma.transactionLogs.create({
-                data: {
-                    amount: posting.tradePrice,
-                    receiver: posting.lenderUsername,
-                    sender: req.username
+                where:{id:postid},
+                data:{
+                    lenderUsername:req.username,
+                    isTradable:false
                 }
             })
         ]);
-        res.status(200).json({ message: 'Buyed A Trade Successfully'});
+        // Performs transactional updates
+        //Deduct the user wallet by tradePrice
+        //fetch seller
+        //Increase sellers wallet by that much
+        //Update the lender name
+       
+        res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
     }catch(error){
-        res.status(500).json({ message: 'Failed to buy a trade', error });
+        console.log(error);
+        res.status(500).json({ message: 'Failed to post a trade', error });
     }
 
     
@@ -488,29 +573,47 @@ const buy = async (req, res) => {
 
 const deleteTradePosting = async (req, res) =>{
     const { postId } = req.body;
+    //console.log(req.params)
+    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.update({
-            where: { id: postId },
-            data:{ isTradable: false }
+            where: {
+              id: postId,
+            },
+            data:{
+                isTradable:false
+            }
         });
         res.json({message: "debtPosting Deleted Successfully", deleteTradePosting: deletePosting});
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: error.message });
     }
 }
 
 const transactionLogs = async (req, res) => {
     try{
+        console.log(req.username)
         const userTransactionLogs = await prisma.transactionLogs.findMany({
             where: {
                 OR: [
                     {receiver: req.username},
                     {sender: req.username}
                 ]
+            },
+            select: {
+                id:true,
+                date:true,
+                amount:true,
+                sender:true,
+                receiver:true
             }
         });
+
+        console.log(userTransactionLogs);
         res.json({message: "Transaction Logs Fetched Successfully", transactionLogs: userTransactionLogs});
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: error.message });
     }
 }
