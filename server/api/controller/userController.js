@@ -215,13 +215,25 @@ const addWalletBalance = async (req, res) =>{
         // Calculate the new wallet balance
         const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
 
-        // Update the user's wallet balance
-        const updatedUser = await prisma.user.update({
-            where: { username: req.username },
-            data: { walletBalance: newWalletBalance }
-        });
+        const [updatedUser,transaction] = await prisma.$transaction([
+            // Update the user's wallet balance
+            prisma.user.update({
+                where: { username: req.username },
+                data: { walletBalance: newWalletBalance }
+            }),
 
-        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance });
+            //Add to transaction log
+            prisma.transactionLogs.create({
+                data:{
+                    amount:parseFloat(additionAmount),
+                    receiver:req.username
+                }
+            })
+
+
+        ]);
+
+        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance,transaction:transaction });
     } catch (error) {
         res.status(500).json({ message : error.message})
     }
@@ -289,6 +301,15 @@ const payDebt = async (req, res) =>{
                 where: { username: lender.username },
                 data: { activeLendTotal: { decrement: amt } }
             });
+
+            //Add to transaction log
+            await prisma.transactionLogs.create({
+                data:{
+                    amount:amt,
+                    sender:borrower.username,
+                    receiver:lender.username
+                }
+            });
         
 
         });
@@ -338,7 +359,7 @@ const lend = async (req, res) => {
         }
 
         // Performs transactional updates
-        const [lenPost, borrower, lender] = await prisma.$transaction([
+        const [lenPost, borrower, lender,transaction] = await prisma.$transaction([
             //Marks the debtPosting as fulfilled and assigns the lender
             prisma.debtPosting.update({
                 where: { id: postid },
@@ -370,10 +391,19 @@ const lend = async (req, res) => {
                         increment:amount,
                     },
                 },
+            }),
+
+            //Add to transaction log
+            prisma.transactionLogs.create({
+                data:{
+                    amount:amount,
+                    sender:req.username,
+                    receiver:posting.borrowerUsername
+                }
             })
         ]);
 
-        res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower });
+        res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower,transaction });
     }catch(error){
         res.status(500).json({ message: 'Failed to lend', error });
     }
@@ -452,7 +482,7 @@ const buy = async (req, res) => {
         }
 
         //If yes proceed with transaction
-        const [buyer, seller, debtPosting] = await prisma.$transaction([
+        const [buyer, seller, debtPosting,transaction] = await prisma.$transaction([
             // //Marks the debtPosting as fulfilled and assigns the lender
             // prisma.debtPosting.update({
             //     where: { id: postid },
@@ -486,6 +516,16 @@ const buy = async (req, res) => {
                 },
             }),
 
+
+            //Add to transaction log
+            prisma.transactionLogs.create({
+                data:{
+                    amount:tp,
+                    sender:req.username,
+                    receiver:posting.lenderUsername
+                }
+            }),
+
             prisma.debtPosting.update({
                 where:{id:postid},
                 data:{
@@ -500,7 +540,7 @@ const buy = async (req, res) => {
         //Increase sellers wallet by that much
         //Update the lender name
        
-        res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting});
+        res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
     }catch(error){
         console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
