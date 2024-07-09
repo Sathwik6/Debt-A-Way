@@ -5,7 +5,10 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npx prisma generate --schema=./db/schema.prisma",
+    "build": "npm install && npx prisma generate --schema=./db/schema.prisma",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
