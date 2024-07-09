@@ -39,7 +39,7 @@ const loginUser = async (req, res) => {
         // Store the token in an HTTP-only cookie
         res.cookie('token', token, { 
             httpOnly: true,
-            secure: true, // Set secure flag to true when in production
+            secure: false, // Set secure flag to true when in production
         });
 
         // Send response to the client
