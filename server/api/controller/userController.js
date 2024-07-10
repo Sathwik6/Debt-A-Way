@@ -503,66 +503,113 @@ const buy = async (req, res) => {
             return res.status(400).json({message: 'Insuffiecient wallet balance'});
         }
 
-        //If yes proceed with transaction
-        const [buyer, seller, debtPosting,transaction] = await prisma.$transaction([
-            // //Marks the debtPosting as fulfilled and assigns the lender
-            // prisma.debtPosting.update({
-            //     where: { id: postid },
-            //     data: {
-            //         isFulfilled: true,
-            //         lenderUsername: req.username
-            //     },
-            // }),
-            //Deposists/adds the money to seller 
-            prisma.user.update({
-                where: { username: posting.lenderUsername},
-                data: {
-                    walletBalance: {
-                        increment: tp,
+        if(posting.borrowerUsername!=req.username){
+
+            //If yes proceed with transaction
+            const [buyer, seller, debtPosting,transaction] = await prisma.$transaction([
+                // //Marks the debtPosting as fulfilled and assigns the lender
+                // prisma.debtPosting.update({
+                //     where: { id: postid },
+                //     data: {
+                //         isFulfilled: true,
+                //         lenderUsername: req.username
+                //     },
+                // }),
+                //Deposists/adds the money to seller 
+                prisma.user.update({
+                    where: { username: posting.lenderUsername},
+                    data: {
+                        walletBalance: {
+                            increment: tp,
+                        },
+                        activeLendTotal: {
+                            decrement: amount,
+                        },
                     },
-                    activeLendTotal: {
-                        decrement: amount,
+                }),
+                //Withdraws/takes-out money from buyer
+                prisma.user.update({
+                    where: { username: req.username },
+                    data: {
+                        walletBalance: {
+                            decrement: tp,
+                        },
+                        activeLendTotal: {
+                            increment:amount,
+                        },
                     },
-                },
-            }),
-            //Withdraws/takes-out money from buyer
-            prisma.user.update({
-                where: { username: req.username },
-                data: {
-                    walletBalance: {
-                        decrement: tp,
-                    },
-                    activeLendTotal: {
-                        increment:amount,
-                    },
-                },
-            }),
+                }),
 
 
-            //Add to transaction log
-            prisma.transactionLogs.create({
-                data:{
-                    amount:tp,
-                    sender:req.username,
-                    receiver:posting.lenderUsername
-                }
-            }),
+                //Add to transaction log
+                prisma.transactionLogs.create({
+                    data:{
+                        amount:tp,
+                        sender:req.username,
+                        receiver:posting.lenderUsername
+                    }
+                }),
 
-            prisma.debtPosting.update({
-                where:{id:postid},
-                data:{
-                    lenderUsername:req.username,
-                    isTradable:false
-                }
-            })
-        ]);
-        // Performs transactional updates
-        //Deduct the user wallet by tradePrice
-        //fetch seller
-        //Increase sellers wallet by that much
-        //Update the lender name
+                prisma.debtPosting.update({
+                    where:{id:postid},
+                    data:{
+                        lenderUsername:req.username,
+                        isTradable:false
+                    }
+                })
+            ]);
+            // Performs transactional updates
+            //Deduct the user wallet by tradePrice
+            //fetch seller
+            //Increase sellers wallet by that much
+            //Update the lender name
+
+            //Buy : If the borrower buys their own debt? 
+            //Then debts owed will be reduced by the posting amount and don't add to debts receivable
+
+            res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
+        }else{
+
+
+
+            const [user,transaction,debtPosting] = await prisma.$transaction([
+                
+                
+                //Withdraws/takes-out money from buyer
+                prisma.user.update({
+                    where: { username: req.username },
+                    data: {
+                        walletBalance: {
+                            decrement: tp,
+                        }
+                    },
+                }),
+
+
+                //Add to transaction log
+                prisma.transactionLogs.create({
+                    data:{
+                        amount:tp,
+                        sender:req.username,
+                        receiver:posting.lenderUsername
+                    }
+                }),
+
+                prisma.debtPosting.update({
+                    where:{id:postid},
+                    data:{
+                        lenderUsername:req.username,
+                        isPaid:true,
+                        isTradable:false
+                    }
+                })
+            ]);
+
+            
+            res.status(200).json({ message: 'Trade Posted Successfully', buy:user,debtPosting,transaction});
+        }
        
-        res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
+        // res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
     }catch(error){
         console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
