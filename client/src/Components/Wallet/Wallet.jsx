@@ -11,22 +11,6 @@ function Wallet(){
         amount: 0,
     });
 
-    /*
-    useEffect(() => {
-        const fetchData = async () => {
-        try {
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`);
-            console.log(res.data);
-        } catch (error) {
-            navigate("/login");
-            console.error('Error fetching data:', error);
-        }
-        };
-
-        fetchData();
-    }, []);
-*/
-
     function handleChange(event) {
         const { name, value } = event.target;
         console.log(name)
@@ -66,7 +50,7 @@ function Wallet(){
                 //make an api call for this particular (updated companent)
 
                 //Find us a better way 
-                toast.success("Amount Added to Wallet Successfully")
+                toast.success("Amount Added to Wallet Successfully");
             }
         } catch (error) {
             toast.error("Error Occured: Couldn't add to Wallet")

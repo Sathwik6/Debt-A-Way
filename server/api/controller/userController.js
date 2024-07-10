@@ -575,16 +575,24 @@ const buy = async (req, res) => {
             const [user,transaction,debtPosting] = await prisma.$transaction([
                 
                 
-                //Withdraws/takes-out money from buyer
+                //Withdraws money from buyer
                 prisma.user.update({
                     where: { username: req.username },
                     data: {
-                        walletBalance: {
-                            decrement: tp,
-                        }
+                        walletBalance: { decrement: tp},
+                        activeDebtsTotal: {decrement: posting.amount},
                     },
                 }),
 
+                //Add Money to seller
+                prisma.user.update({
+                    where: { username: posting.lenderUsername },
+                    data: { 
+                        walletBalance: { increment: tp},
+                        activeLendTotal: { decrement: posting.amount},
+                    }
+
+                }),
 
                 //Add to transaction log
                 prisma.transactionLogs.create({
@@ -613,9 +621,7 @@ const buy = async (req, res) => {
     }catch(error){
         console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
-    }
-
-    
+    }   
 }
 
 const deleteTradePosting = async (req, res) =>{

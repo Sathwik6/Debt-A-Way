@@ -36,7 +36,6 @@ const Transactions = () => {
         const fetchTransactionLogs = async () =>{
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/transaction-logs`);
-                console.log(response)
                 setTransactionLogs(response.data.transactionLogs);
               }catch (error) {
                 console.error('Error fetching Transaction Logs:', error.response?.data || error.message);
