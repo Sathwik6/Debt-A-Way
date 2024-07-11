@@ -40,7 +40,8 @@ const loginUser = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true, // Ensure this is true for HTTPS
-            sameSite: 'None' // Necessary for cross-site cookies
+            sameSite: 'None', // Necessary for cross-site cookies
+            path: '/'
         });
 
         // Send response to the client
@@ -90,7 +91,12 @@ const registerUser = async (req, res) => {
 
 const logoutUser = (req, res, next) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true, // Ensure this is true for HTTPS
+            sameSite: 'None', // Necessary for cross-site cookies
+            path: '/' // Ensure this matches the path used when setting the cookie
+        });
         res.json({ success: true });
       } catch (error) {
         next(error);
