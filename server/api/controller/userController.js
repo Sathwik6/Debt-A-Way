@@ -85,7 +85,6 @@ const lendings = async (req, res) =>{
                 lenderUsername: req.username,
                 isFulfilled: true,
                 isPaid: false,
-                isTradable: false,
             },
             select: {
                 id: true,
