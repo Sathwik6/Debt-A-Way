@@ -30,24 +30,26 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        //just picks the username from the user object
+        // just picks the username from the user object
         const userPayload = _.pick(user, ['username']);
 
         // Generate a JWT token
-        const token = jwt.sign(userPayload, jwtConfig.secret, jwtConfig.options);
+        const token = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // Store the token in an HTTP-only cookie
-        res.cookie('token', token, { 
+        res.cookie('token', token, {
             httpOnly: true,
-            secure: true, // Set secure flag to true when in production
+            secure: true, // Ensure this is true for HTTPS
+            sameSite: 'None' // Necessary for cross-site cookies
         });
 
         // Send response to the client
-        res.status(200).json({ message: 'Login successful'});
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error });
     }
 };
+
 
 
 // Handles user registration
