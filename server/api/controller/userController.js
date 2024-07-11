@@ -1,27 +1,17 @@
-import { PrismaClient, Prisma} from '@prisma/client'
+// import { PrismaClient, Prisma } from '@prisma/client'
+// const prisma = new PrismaClient();
 
-const prisma = new PrismaClient();
+import { prisma } from "../../db/config.js";
 
 //gets username (Can query to get all the details.)
 const getUser = async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
-            where: {
-                username: req.username
-            },
-            select: {
-                username: true,
-                email: true,
-                walletBalance: true,
-                activeDebtsTotal: true,
-                activeLendTotal: true
-            }
+            where: { username: req.username }
         });
-
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-
         res.json(user);
     } catch (error) {
         console.error('Error fetching user details:', error);
@@ -35,7 +25,6 @@ const walletBalance = async (req, res) =>{
             where: { username: req.username },
             select: { walletBalance: true }
         });
-        console.log("User:", userWalletBalance);
         res.json({message: "Wallet-Balance Fetched Successfully", walletBalance: userWalletBalance.walletBalance});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -61,7 +50,6 @@ const activeLendTotal = async (req, res) =>{
             where: { username: req.username },
             select: { activeLendTotal: true }
         });
-        console.log("User:", userActiveLendTotal);
         res.json({message: "Active Lend Total Fetched Successfully", activeLendTotal: userActiveLendTotal.activeLendTotal});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -156,13 +144,9 @@ const lendingsHistory = async (req, res) =>{
 
 const deleteDebtPosting = async (req, res) =>{
     const { postId } = req.query;
-    //console.log(req.params)
-    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.delete({
-            where: {
-              id: postId,
-            },
+            where: { id: postId },
         });
         res.json({message: "debtPosting Deleted Successfully", deleteDebtPosting: deletePosting});
     } catch (error) {
@@ -178,14 +162,13 @@ const updateDebtPosting = async (req, res) =>{
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: {
-              id: postId,
-            },
-            // postingInfor is a js object that contains  amount and interestRate
-            data: {amount: parseFloat(postingInfo.updatedAmount),
+            where: { id: postId },
+            // postingInfo is a js object that contains  amount and interestRate
+            data: {
+                amount: parseFloat(postingInfo.updatedAmount),
                 interestRate: parseFloat(postingInfo.updatedInterestRate),
             },
-          })
+        });
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -200,20 +183,17 @@ const updateTradePosting = async (req, res) => {
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: {
-              id: postId,
-            },
+            where: { id: postId },
             // postingInfor is a js object that contains  amount and interestRate
             data: {
                 tradePrice: parseFloat(postingInfo.updatedTradePrice),
             },
-          })
+          });
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 const addWalletBalance = async (req, res) => {
     const { additionAmount } = req.body;
@@ -225,26 +205,12 @@ const addWalletBalance = async (req, res) => {
     }
     
     try {
-        // find previous wallet balance
-        const user = await prisma.user.findFirst({
-            where: { username: req.username },
-            select: { walletBalance: true }
-        });
-
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        // Calculate the new wallet balance
-        const newWalletBalance = parseFloat(user.walletBalance) + amount;
-
         const [updatedUser, transaction] = await prisma.$transaction([
             // Update the user's wallet balance
             prisma.user.update({
                 where: { username: req.username },
-                data: { walletBalance: newWalletBalance }
+                data: { walletBalance: { increment: amount } }
             }),
-
             // Add to transaction log
             prisma.transactionLogs.create({
                 data: {
@@ -253,95 +219,11 @@ const addWalletBalance = async (req, res) => {
                 }
             })
         ]);
-
         res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance, transaction: transaction });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
-
-// const payDebt = async (req, res) =>{
-//     //console.log(req.body)
-//     const { postid } = req.body;
-//     //console.log(postid)
-//     try{
-//         const debt = await prisma.debtPosting.findFirst({
-//             where: { id: postid},
-//             include: {
-//                 borrower: true,
-//                 lender: true,
-//                 //amount:true, //This was not being fetched
-//             }
-//         });
-//         console.log(debt)
-//         if (!debt) {
-//             return res.status(404).json({message: "debt not found!"});
-//         }
-
-//         const {borrower, lender, amount} = debt;
-
-//         //Convert to float to compare
-//         const borrowerBalance = parseFloat(borrower.walletBalance, 2);
-//         const amt = parseFloat(amount, 2);
-
-//         //Not doing the above conversion will lead to 500 error
-//         // check if the borrower has enough in his wallet
-//         if (borrowerBalance < amt){
-//             return res.status(400).json({message: "insufficient funds! Please add to wallet and try again"})
-//         }
-
-//         // transaction
-//         await prisma.$transaction(async (prisma) => {
-
-//             // Minus amount from borrower's wallet
-//             await prisma.user.update({
-//                 where: { username: borrower.username },
-//                 data: { walletBalance: { decrement: amt } }
-//             });
-
-//             // Add amount to lender's wallet
-//             await prisma.user.update({
-//                 where: { username: lender.username },
-//                 data: { walletBalance: { increment: amt } }
-//             });
-
-//             // Mark the debt as paid
-//             await prisma.debtPosting.update({
-//                 where: { id: postid },
-//                 data: { isPaid: true }
-//             });
-
-//             //Reduce borrowers debt owed
-//             await prisma.user.update({
-//                 where: { username: borrower.username },
-//                 data: { activeDebtsTotal: { decrement: amt } }
-//             });
-
-//             //Reduce lenders debts recievable
-//             await prisma.user.update({
-//                 where: { username: lender.username },
-//                 data: { activeLendTotal: { decrement: amt } }
-//             });
-
-//             //Add to transaction log
-//             await prisma.transactionLogs.create({
-//                 data:{
-//                     amount:amt,
-//                     sender:borrower.username,
-//                     receiver:lender.username
-//                 }
-//             });
-        
-
-//         });
-
-//         res.json({ message: "Payment successful!" });
-
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
 
 const payDebt = async (req, res) => {
     const { postid } = req.body;
