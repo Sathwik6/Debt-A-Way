@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-const allowedOrigin = 'http://localhost:5173';
+const allowedOrigin = 'https://debt-a-way.vercel.app';
 
 // CORS configuration
 const corsOptions = {

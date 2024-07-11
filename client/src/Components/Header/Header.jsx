@@ -20,7 +20,9 @@ function Header(){
 
     const fetchWalletBalance = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/wallet-balance`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/wallet-balance`, {
+                withCredentials: true,
+            });
             setWalletBalance(response.data.walletBalance);
         } catch (error) {
             console.error('Error fetching wallet balance:', error);
@@ -29,7 +31,9 @@ function Header(){
     
     const fetchDebtsOwed = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/activeDebtsTotal`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/activeDebtsTotal`, {
+                withCredentials: true,
+            });
             setDebtsOwed(response.data.activeDebtsTotal);
         } catch (error) {
             console.error('Error fetching debts owed:', error);
@@ -38,7 +42,9 @@ function Header(){
     
     const fetchDebtsReceivable = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/activeLendTotal`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/activeLendTotal`, {
+                withCredentials: true,
+            });
             setDebtsReceivable(response.data.activeLendTotal);
         } catch (error) {
             console.error('Error fetching debts receivable:', error);
