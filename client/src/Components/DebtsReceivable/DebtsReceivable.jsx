@@ -45,7 +45,9 @@ function Lendings(){
     useEffect(() => {
         const fetchDebts = async () =>{
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/lendings`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/lendings`, {
+                  withCredentials: true,
+              });
                 setDebtsReceivable(response.data.debtsReceivable);
               } catch (error) {
                 console.error('Error fetching Debts Receivable by User:', error);
@@ -72,7 +74,9 @@ function Lendings(){
         try {
           console.log(postid)
 
-          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,{
+            withCredentials: true,
+        },
                 {postid,tradePrice},
             );
             console.log(response);

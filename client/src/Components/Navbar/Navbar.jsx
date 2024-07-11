@@ -19,7 +19,9 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/logout`);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/auth/logout`, {}, {
+        withCredentials: true,
+    });
       console.log(response);
       navigate("/login");
     } catch (error) {
@@ -63,7 +65,9 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/get-user`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/get-user`, {
+              withCredentials: true,
+          });
             setUsername(response.data.username);
         } catch (error) {
             console.log("Username fetching failed", error);

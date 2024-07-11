@@ -20,7 +20,9 @@ function Home(){
     useEffect(() => {
         const isAuthorized = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/protected`, {
+                    withCredentials: true,
+                });
                 console.log(response.data);
             } catch (error) {
                 navigate("/login");

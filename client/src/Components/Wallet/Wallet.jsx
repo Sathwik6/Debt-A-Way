@@ -39,7 +39,9 @@ function Wallet(){
         try {
             const amount = parseFloat(newWalletForm.amount);
             
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/add-wallet-balance`, 
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/add-wallet-balance`, {
+                withCredentials: true,
+            },
                 { additionAmount: newWalletForm.amount },
                 { withCredentials: true } // cookiesss
             );
