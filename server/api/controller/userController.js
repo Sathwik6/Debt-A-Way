@@ -215,15 +215,16 @@ const updateTradePosting = async (req, res) => {
 };
 
 
-const addWalletBalance = async (req, res) =>{
+const addWalletBalance = async (req, res) => {
     const { additionAmount } = req.body;
+    const amount = parseFloat(additionAmount);
 
     // validate amount 
-    if (isNaN(additionAmount) || additionAmount < 0) {
+    if (isNaN(amount) || amount <= 0) {
         return res.status(400).send('Invalid amount');
-      }
+    }
     
-    try{
+    try {
         // find previous wallet balance
         const user = await prisma.user.findFirst({
             where: { username: req.username },
@@ -235,31 +236,30 @@ const addWalletBalance = async (req, res) =>{
         }
 
         // Calculate the new wallet balance
-        const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
+        const newWalletBalance = parseFloat(user.walletBalance) + amount;
 
-        const [updatedUser,transaction] = await prisma.$transaction([
+        const [updatedUser, transaction] = await prisma.$transaction([
             // Update the user's wallet balance
             prisma.user.update({
                 where: { username: req.username },
                 data: { walletBalance: newWalletBalance }
             }),
 
-            //Add to transaction log
+            // Add to transaction log
             prisma.transactionLogs.create({
-                data:{
-                    amount:parseFloat(additionAmount),
-                    receiver:req.username
+                data: {
+                    amount: amount,
+                    receiver: req.username
                 }
             })
-
-
         ]);
 
-        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance,transaction:transaction });
+        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance, transaction: transaction });
     } catch (error) {
-        res.status(500).json({ message : error.message})
+        res.status(500).json({ message: error.message });
     }
 };
+
 
 const payDebt = async (req, res) =>{
     //console.log(req.body)
