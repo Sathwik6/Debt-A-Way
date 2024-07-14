@@ -230,7 +230,7 @@ const payDebt = async (req, res) => {
     try {
         const debt = await prisma.debtPosting.findFirst({
             where: { id: postid },
-            select: { amount: true },
+            //select: { amount: true },
             include: {
                 borrower: true,
                 lender: true,
