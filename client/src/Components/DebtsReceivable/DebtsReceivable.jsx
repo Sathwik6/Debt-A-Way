@@ -74,11 +74,10 @@ function Lendings(){
         try {
           console.log(postid)
 
-          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,{
-            withCredentials: true,
-        },
-                {postid,tradePrice},
-            );
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/trade`,
+            {postid,tradePrice},
+            { withCredentials: true },
+          );
             console.log(response);
           handleCloseTradeModal();
           toast.success("Trade Confirmed!")

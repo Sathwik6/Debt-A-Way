@@ -1,27 +1,17 @@
-import { PrismaClient, Prisma} from '@prisma/client'
+// import { PrismaClient, Prisma } from '@prisma/client'
+// const prisma = new PrismaClient();
 
-const prisma = new PrismaClient();
+import { prisma } from "../../db/config.js";
 
 //gets username (Can query to get all the details.)
 const getUser = async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
-            where: {
-                username: req.username
-            },
-            select: {
-                username: true,
-                email: true,
-                walletBalance: true,
-                activeDebtsTotal: true,
-                activeLendTotal: true
-            }
+            where: { username: req.username }
         });
-
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-
         res.json(user);
     } catch (error) {
         console.error('Error fetching user details:', error);
@@ -35,7 +25,6 @@ const walletBalance = async (req, res) =>{
             where: { username: req.username },
             select: { walletBalance: true }
         });
-        console.log("User:", userWalletBalance);
         res.json({message: "Wallet-Balance Fetched Successfully", walletBalance: userWalletBalance.walletBalance});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -61,7 +50,6 @@ const activeLendTotal = async (req, res) =>{
             where: { username: req.username },
             select: { activeLendTotal: true }
         });
-        console.log("User:", userActiveLendTotal);
         res.json({message: "Active Lend Total Fetched Successfully", activeLendTotal: userActiveLendTotal.activeLendTotal});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -97,7 +85,6 @@ const lendings = async (req, res) =>{
                 lenderUsername: req.username,
                 isFulfilled: true,
                 isPaid: false,
-                isTradable: false,
             },
             select: {
                 id: true,
@@ -156,13 +143,9 @@ const lendingsHistory = async (req, res) =>{
 
 const deleteDebtPosting = async (req, res) =>{
     const { postId } = req.query;
-    //console.log(req.params)
-    //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.delete({
-            where: {
-              id: postId,
-            },
+            where: { id: postId },
         });
         res.json({message: "debtPosting Deleted Successfully", deleteDebtPosting: deletePosting});
     } catch (error) {
@@ -178,14 +161,13 @@ const updateDebtPosting = async (req, res) =>{
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: {
-              id: postId,
-            },
-            // postingInfor is a js object that contains  amount and interestRate
-            data: {amount: parseFloat(postingInfo.updatedAmount),
+            where: { id: postId },
+            // postingInfo is a js object that contains  amount and interestRate
+            data: {
+                amount: parseFloat(postingInfo.updatedAmount),
                 interestRate: parseFloat(postingInfo.updatedInterestRate),
             },
-          })
+        });
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -200,145 +182,112 @@ const updateTradePosting = async (req, res) => {
         }
 
         const updatePosting = await prisma.debtPosting.update({
-            where: {
-              id: postId,
-            },
+            where: { id: postId },
             // postingInfor is a js object that contains  amount and interestRate
             data: {
                 tradePrice: parseFloat(postingInfo.updatedTradePrice),
             },
-          })
+          });
         res.json({message: "Records updated Successfully", updateDebtPosting: updatePosting});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-
-const addWalletBalance = async (req, res) =>{
+const addWalletBalance = async (req, res) => {
     const { additionAmount } = req.body;
+    const amount = parseFloat(additionAmount);
 
     // validate amount 
-    if (isNaN(additionAmount) || additionAmount < 0) {
+    if (isNaN(amount) || amount <= 0) {
         return res.status(400).send('Invalid amount');
-      }
+    }
     
-    try{
-        // find previous wallet balance
-        const user = await prisma.user.findFirst({
-            where: { username: req.username },
-            select: { walletBalance: true }
-        });
-
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        // Calculate the new wallet balance
-        const newWalletBalance = parseFloat(user.walletBalance) + parseFloat(additionAmount);
-
-        const [updatedUser,transaction] = await prisma.$transaction([
+    try {
+        const [updatedUser, transaction] = await prisma.$transaction([
             // Update the user's wallet balance
             prisma.user.update({
                 where: { username: req.username },
-                data: { walletBalance: newWalletBalance }
+                data: { walletBalance: { increment: amount } }
             }),
-
-            //Add to transaction log
+            // Add to transaction log
             prisma.transactionLogs.create({
-                data:{
-                    amount:parseFloat(additionAmount),
-                    receiver:req.username
+                data: {
+                    amount: amount,
+                    receiver: req.username
                 }
             })
-
-
         ]);
-
-        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance,transaction:transaction });
+        res.json({ message: "Added to Wallet Successfully", walletBalance: updatedUser.walletBalance, transaction: transaction });
     } catch (error) {
-        res.status(500).json({ message : error.message})
+        res.status(500).json({ message: error.message });
     }
 };
 
-const payDebt = async (req, res) =>{
-    //console.log(req.body)
+const payDebt = async (req, res) => {
     const { postid } = req.body;
-    //console.log(postid)
-    try{
+    
+    try {
         const debt = await prisma.debtPosting.findFirst({
-            where: { id: postid},
+            where: { id: postid },
+            select: { amount: true },
             include: {
                 borrower: true,
                 lender: true,
                 amount:true, //This was not being fetched
             }
         });
-        console.log(debt)
+
         if (!debt) {
-            return res.status(404).json({message: "debt not found!"});
+            return res.status(404).json({ message: "debt not found!" });
         }
 
-        const {borrower, lender, amount} = debt;
+        const { borrower, lender, amount } = debt;
 
-        //Convert to float to compare
         const borrowerBalance = parseFloat(borrower.walletBalance, 2);
         const amt = parseFloat(amount, 2);
 
-        //Not doing the above conversion will lead to 500 error
-        // check if the borrower has enough in his wallet
-        if (borrowerBalance < amt){
-            return res.status(400).json({message: "insufficient funds! Please add to wallet and try again"})
+        if (borrowerBalance < amt) {
+            return res.status(400).json({ message: "insufficient funds! Please add to wallet and try again" });
         }
 
-        // transaction
-        await prisma.$transaction(async (prisma) => {
-
-            // Minus amount from borrower's wallet
-            await prisma.user.update({
+        await prisma.$transaction([
+            //Withdraw Money From Borrower and decrease activeDebtTotal
+            prisma.user.update({
                 where: { username: borrower.username },
-                data: { walletBalance: { decrement: amt } }
-            });
+                data: { 
+                    walletBalance: { decrement: amt },
+                    activeDebtsTotal: { decrement: amt }
+                }
+            }),
 
-            // Add amount to lender's wallet
-            await prisma.user.update({
+            //Add money to lender and decrease activeLendsTotal
+            prisma.user.update({
                 where: { username: lender.username },
-                data: { walletBalance: { increment: amt } }
-            });
-
-            // Mark the debt as paid
-            await prisma.debtPosting.update({
+                data: { 
+                    walletBalance: { increment: amt },
+                    activeLendTotal: { decrement: amt}
+                }
+            }),
+            
+            //Mark isPaid to true
+            prisma.debtPosting.update({
                 where: { id: postid },
                 data: { isPaid: true }
-            });
+            }),
 
-            //Reduce borrowers debt owed
-            await prisma.user.update({
-                where: { username: borrower.username },
-                data: { activeDebtsTotal: { decrement: amt } }
-            });
-
-            //Reduce lenders debts recievable
-            await prisma.user.update({
-                where: { username: lender.username },
-                data: { activeLendTotal: { decrement: amt } }
-            });
-
-            //Add to transaction log
-            await prisma.transactionLogs.create({
-                data:{
-                    amount:amt,
-                    sender:borrower.username,
-                    receiver:lender.username
+            //Add the tranjsaction to transaction Log
+            prisma.transactionLogs.create({
+                data: {
+                    amount: amt,
+                    sender: borrower.username,
+                    receiver: lender.username
                 }
-            });
-        
-
-        });
-
+            })
+        ]);
         res.json({ message: "Payment successful!" });
-
     } catch (error) {
+        console.error("Payment failed:", error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -374,9 +323,9 @@ const lend = async (req, res) => {
 
         //Check walletBalance (Insufficient balance)
         if(userBalance < amount){
-            console.log(userBalance)
-            console.log(amount)
-            console.log(user)
+            // console.log(userBalance)
+            // console.log(amount)
+            // console.log(user)
             return res.status(400).json({message: 'Insufficient wallet balance'});
         }
 
@@ -390,28 +339,22 @@ const lend = async (req, res) => {
                     lenderUsername: req.username
                 },
             }),
+
             //Deposists/adds the money to borrower 
             prisma.user.update({
                 where: { username: posting.borrowerUsername },
                 data: {
-                    walletBalance: {
-                        increment: amount,
-                    },
-                    activeDebtsTotal: {
-                        increment: amount,
-                    },
+                    walletBalance: { increment: amount },
+                    activeDebtsTotal: { increment: amount },
                 },
             }),
+
             //Withdraws/takes-out money from lender
             prisma.user.update({
                 where: { username: req.username },
                 data: {
-                    walletBalance: {
-                        decrement: amount,
-                    },
-                    activeLendTotal: {
-                        increment:amount,
-                    },
+                    walletBalance: { decrement: amount },
+                    activeLendTotal: { increment:amount },
                 },
             }),
 
@@ -424,13 +367,10 @@ const lend = async (req, res) => {
                 }
             })
         ]);
-
         res.status(200).json({ message: 'Lent Successfully', lend:lenPost,lender,borrower,transaction });
     }catch(error){
         res.status(500).json({ message: 'Failed to lend', error });
     }
-
-    
 }
 
 //Backend logic of trade
@@ -447,7 +387,7 @@ const trade = async (req, res) => {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        if(posting.isTradable==true){
+        if(posting.isTradable == true){
             return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
         }
 
@@ -476,17 +416,13 @@ const buy = async (req, res) => {
             where: { id: postid }
         });
 
+        //Fetch the posting
         if (!posting) {
             return res.status(400).json({ message: 'No posting found. Invalid Request' });
         }
 
-        // if(posting.isTradable==true){
-        //     return res.status(500).json({message: 'You already listed a trade please try update button to update it or use delete button'})
-        // }
-
-        //Fetch the posting
         //Fetch the user
-        const user=await prisma.user.findFirst({
+        const user = await prisma.user.findFirst({
             where:{username:req.username}
         });
 
@@ -503,43 +439,26 @@ const buy = async (req, res) => {
             return res.status(400).json({message: 'Insuffiecient wallet balance'});
         }
 
-        if(posting.borrowerUsername!=req.username){
-
+        if(posting.borrowerUsername != req.username){
             //If yes proceed with transaction
             const [buyer, seller, debtPosting,transaction] = await prisma.$transaction([
-                // //Marks the debtPosting as fulfilled and assigns the lender
-                // prisma.debtPosting.update({
-                //     where: { id: postid },
-                //     data: {
-                //         isFulfilled: true,
-                //         lenderUsername: req.username
-                //     },
-                // }),
                 //Deposists/adds the money to seller 
                 prisma.user.update({
                     where: { username: posting.lenderUsername},
                     data: {
-                        walletBalance: {
-                            increment: tp,
-                        },
-                        activeLendTotal: {
-                            decrement: amount,
-                        },
+                        walletBalance: { increment: tp },
+                        activeLendTotal: { decrement: amount },
                     },
                 }),
+
                 //Withdraws/takes-out money from buyer
                 prisma.user.update({
                     where: { username: req.username },
                     data: {
-                        walletBalance: {
-                            decrement: tp,
-                        },
-                        activeLendTotal: {
-                            increment:amount,
-                        },
+                        walletBalance: { decrement: tp },
+                        activeLendTotal: { increment:amount },
                     },
                 }),
-
 
                 //Add to transaction log
                 prisma.transactionLogs.create({
@@ -550,6 +469,7 @@ const buy = async (req, res) => {
                     }
                 }),
 
+                //Update the Posting
                 prisma.debtPosting.update({
                     where:{id:postid},
                     data:{
@@ -558,23 +478,9 @@ const buy = async (req, res) => {
                     }
                 })
             ]);
-            // Performs transactional updates
-            //Deduct the user wallet by tradePrice
-            //fetch seller
-            //Increase sellers wallet by that much
-            //Update the lender name
-
-            //Buy : If the borrower buys their own debt? 
-            //Then debts owed will be reduced by the posting amount and don't add to debts receivable
-
             res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
         }else{
-
-
-
-            const [user,transaction,debtPosting] = await prisma.$transaction([
-                
-                
+            const [user, transaction, debtPosting] = await prisma.$transaction([
                 //Withdraws money from buyer
                 prisma.user.update({
                     where: { username: req.username },
@@ -612,12 +518,8 @@ const buy = async (req, res) => {
                     }
                 })
             ]);
-
-            
             res.status(200).json({ message: 'Trade Posted Successfully', buy:user,debtPosting,transaction});
         }
-       
-        // res.status(200).json({ message: 'Trade Posted Successfully', buy:seller,buyer,debtPosting,transaction});
     }catch(error){
         console.log(error);
         res.status(500).json({ message: 'Failed to post a trade', error });
@@ -630,12 +532,8 @@ const deleteTradePosting = async (req, res) =>{
     //console.log(postId)
     try {
         const deletePosting = await prisma.debtPosting.update({
-            where: {
-              id: postId,
-            },
-            data:{
-                isTradable:false
-            }
+            where: { id: postId },
+            data:{ isTradable:false }
         });
         res.json({message: "debtPosting Deleted Successfully", deleteTradePosting: deletePosting});
     } catch (error) {
@@ -646,24 +544,15 @@ const deleteTradePosting = async (req, res) =>{
 
 const transactionLogs = async (req, res) => {
     try{
-        console.log(req.username)
         const userTransactionLogs = await prisma.transactionLogs.findMany({
             where: {
                 OR: [
                     {receiver: req.username},
                     {sender: req.username}
                 ]
-            },
-            select: {
-                id:true,
-                date:true,
-                amount:true,
-                sender:true,
-                receiver:true
             }
         });
-
-        console.log(userTransactionLogs);
+        //console.log(userTransactionLogs);
         res.json({message: "Transaction Logs Fetched Successfully", transactionLogs: userTransactionLogs});
     } catch (error) {
         console.log(error)
