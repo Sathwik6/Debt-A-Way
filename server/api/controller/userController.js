@@ -234,7 +234,7 @@ const payDebt = async (req, res) => {
             include: {
                 borrower: true,
                 lender: true,
-                amount:true, //This was not being fetched
+                //amount:true, //This was not being fetched
             }
         });
 
