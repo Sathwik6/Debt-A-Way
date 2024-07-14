@@ -52,9 +52,7 @@ function Debts(){
     useEffect(() => {
         const fetchDebts = async () =>{
             try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/debts`, {
-                    withCredentials: true,
-                });
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/routes/user/debts`);
                 setDebtsOwed(response.data.debtsOwed);
               } catch (error) {
                 console.error('Error fetching Debts Receivable by User:', error);
